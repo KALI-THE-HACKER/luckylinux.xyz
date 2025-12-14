@@ -10,7 +10,6 @@ export const metadata: Metadata = {
   title: "Luckylinux's Self-Hosted Universe",
   description:
     "Things I build. Things I host. Things I run. A collection of self-hosted systems, applications, and experiments running on personal infrastructure.",
-  generator: "v0.app",
   icons: {
     icon: [
       {
@@ -37,6 +36,19 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-003H5Y5G7G"></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-003H5Y5G7G');
+            `,
+          }}
+        />
+      </head>
       <body className={`font-sans antialiased`}>
         {children}
       </body>
