@@ -40,7 +40,7 @@ export default function Home() {
               className="border-zinc-700 bg-zinc-900/50 text-zinc-100 hover:bg-zinc-800 hover:border-zinc-600 backdrop-blur-sm transition-all duration-300"
               asChild
             >
-              <Link target="_blank" href="https://portfolio.luckylinux.xyz">View Portfolio</Link>
+              <Link target="_blank" href="https://portfolio.luckylinux.dev">View Portfolio</Link>
             </Button>
           </div>
         </div>
@@ -53,7 +53,7 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Railsplit Card */}
-            <Link href="https://railsplit.luckylinux.xyz" target="_blank" rel="noopener noreferrer">
+            <Link href="https://railsplit.luckylinux.dev" target="_blank" rel="noopener noreferrer">
               <div className="group relative h-full bg-gradient-to-br from-zinc-900/90 to-zinc-900/50 backdrop-blur-xl border border-zinc-800 rounded-2xl p-8 hover:border-cyan-600 transition-all duration-500 hover:shadow-2xl hover:shadow-cyan-500/10 cursor-pointer flex flex-col">
                 <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
                 <div className="relative z-10 space-y-4 flex-1 flex flex-col">
@@ -71,7 +71,7 @@ export default function Home() {
             </Link>
 
             {/* Portfolio Card */}
-            <Link href="https://portfolio.luckylinux.xyz" target="_blank" rel="noopener noreferrer">
+            <Link href="https://portfolio.luckylinux.dev" target="_blank" rel="noopener noreferrer">
               <div className="group relative h-full bg-gradient-to-br from-zinc-900/90 to-zinc-900/50 backdrop-blur-xl border border-zinc-800 rounded-2xl p-8 hover:border-blue-600 transition-all duration-500 hover:shadow-2xl hover:shadow-blue-500/10 cursor-pointer flex flex-col">
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
                 <div className="relative z-10 space-y-4 flex-1 flex flex-col">
@@ -87,7 +87,7 @@ export default function Home() {
             </Link>
 
             {/* Private Cloud Card */}
-            <Link href="https://cloud.luckylinux.xyz" target="_blank" rel="noopener noreferrer">
+            <Link href="https://cloud.luckylinux.dev" target="_blank" rel="noopener noreferrer">
               <div className="group relative h-full bg-gradient-to-br from-zinc-900/90 to-zinc-900/50 backdrop-blur-xl border border-zinc-800 rounded-2xl p-8 hover:border-pink-800 transition-all duration-500 hover:shadow-2xl hover:shadow-pink-500/10 cursor-pointer flex flex-col">
                 <div className="absolute inset-0 bg-gradient-to-br from-pink-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
                 <div className="relative z-10 space-y-4 flex-1 flex flex-col">

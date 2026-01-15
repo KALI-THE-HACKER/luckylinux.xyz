@@ -1,4 +1,4 @@
-# Source for Automatic Deployment of luckylinux.xyz
+# Source for Automatic Deployment of luckylinux.dev
 
 This repository contains the source code for **Luckylinux’s Self-Hosted Universe** — the main entry point for my personal domain.
 
@@ -8,7 +8,7 @@ It acts as a gateway to the systems, applications, and experiments I build, host
 
 ## Purpose
 
-- Holds the source code for **luckylinux.xyz**
+- Holds the source code for **luckylinux.dev**
 - Serves as a central index to self-hosted projects and subdomains
 - Designed to be minimal, intentional, and developer-focused
 - Acts as the canonical source for automated deployments
@@ -21,7 +21,7 @@ It acts as a gateway to the systems, applications, and experiments I build, host
 - DNS and domain management handled via the **Cloudflare ecosystem**
 - The live site is available at:
 
-  **https://luckylinux.xyz**
+  **https://luckylinux.dev**
 
 - Changes pushed to the `production` branch are automatically built and deployed by Cloudflare Pages
 
