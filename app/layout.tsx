@@ -37,6 +37,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <script defer data-domain="luckylinux.dev" src="https://analytics.luckylinux.dev/js/script.js"></script>
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-003H5Y5G7G"></script>
         <script
           dangerouslySetInnerHTML={{
@@ -49,7 +50,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={`font-sans antialiased`}>
+      <body className="font-sans antialiased">
         {children}
       </body>
     </html>
