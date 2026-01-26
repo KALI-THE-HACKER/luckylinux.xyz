@@ -266,6 +266,186 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Server Infrastructure Documentation */}
+      <><section className="relative px-4 py-24">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl md:text-5xl font-bold mb-4 bg-gradient-to-br from-zinc-100 to-zinc-400 bg-clip-text text-transparent">Server Infrastructure</h2>
+              <p className="text-zinc-500 text-lg">Technical documentation of the self-hosted setup</p>
+            </div>
+
+            <div className="space-y-12 text-zinc-300">
+              {/* Overview */}
+              <div className="space-y-4">
+                <h3 className="text-2xl font-semibold text-zinc-100">Overview</h3>
+                <div className="text-zinc-400 leading-relaxed space-y-3">
+                  <p>
+                    This is a local self-hosted server used for learning, experimentation, and running real production services. The infrastructure provides hands-on experience with system administration, networking, and DevOps practices while serving actual applications to users.
+                  </p>
+                  <p>
+                    Services are exposed securely to the internet using Cloudflare Tunnel without opening any inbound ports on the router or firewall. This eliminates the need for port forwarding and provides an additional layer of security through Cloudflare's edge network.
+                  </p>
+                </div>
+              </div>
+
+              {/* Architecture Overview */}
+              <div className="space-y-4">
+                <h3 className="text-2xl font-semibold text-zinc-100">Architecture Overview</h3>
+                <div className="text-zinc-400 leading-relaxed space-y-3">
+                  <p>
+                    The request flow follows this path: <span className="text-cyan-400 font-mono text-sm">Users → Cloudflare Edge → Cloudflare Tunnel → Nginx Reverse Proxy → Internal Services</span>
+                  </p>
+                  <p>
+                    Cloudflare acts as the public-facing endpoint, routing requests through an encrypted tunnel to the local server. Nginx then handles internal routing to appropriate services based on hostname and path.
+                  </p>
+                  <div className="w-full">
+                    <img
+                      src="/cloud-infrastructure.png"
+                      alt="Server Infrastructure Architecture Diagram"
+                      className="w-full h-auto" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Networking & Exposure */}
+              <div className="space-y-4">
+                <h3 className="text-2xl font-semibold text-zinc-100">Networking & Exposure</h3>
+                <div className="text-zinc-400 leading-relaxed space-y-3">
+                  <p>
+                    Cloudflare Tunnel (cloudflared) is configured to map multiple subdomains to internal services. The tunnel daemon runs locally and maintains persistent connections to Cloudflare's edge network, eliminating the need for publicly exposed IP addresses or open inbound ports.
+                  </p>
+                  <p>
+                    Most hostnames terminate at <span className="text-cyan-400 font-mono text-sm">localhost:443</span>, where Nginx handles reverse proxying based on the Host header. Some services connect directly to their specific ports for performance or compatibility reasons.
+                  </p>
+                </div>
+              </div>
+
+              {/* cloudflared Configuration */}
+              <div className="space-y-4">
+                <h3 className="text-2xl font-semibold text-zinc-100">cloudflared Configuration (Simplified)</h3>
+                <div className="text-zinc-400 leading-relaxed space-y-3">
+                  <p className="text-sm text-zinc-500 italic">
+                    Note: This configuration is a real-world but sanitized example showing how subdomains are mapped to internal services.
+                  </p>
+                  <div className="bg-zinc-950 border border-zinc-800 rounded-lg p-6 overflow-x-auto">
+                    <pre className="text-sm text-zinc-300 font-mono">
+                      {`ingress:
+  - hostname: server.luckylinux.dev
+    service: https://localhost:443
+  - hostname: railsplit-server.luckylinux.dev
+    service: http://127.0.0.1:3108
+  - hostname: n8n.luckylinux.dev
+    service: https://localhost:443
+  - hostname: chronocare-server.luckylinux.dev
+    service: http://127.0.0.1:3102
+  - hostname: code.luckylinux.dev
+    service: https://localhost:443
+  - hostname: analytics.luckylinux.dev
+    service: https://localhost:443
+  - hostname: ssh.luckylinux.dev
+    service: ssh://localhost:22 #(secured)
+  - hostname: openwisp2.luckylinux.dev
+    service: http://127.0.0.1:80
+  - hostname: cloud.luckylinux.dev
+    service: https://localhost:443
+  - service: http_status:404`}
+                    </pre>
+                  </div>
+                  <p className="text-sm text-zinc-500">
+                    Internal routing to specific applications is handled by Nginx, not by cloudflared. The tunnel daemon simply forwards requests to the appropriate local port.
+                  </p>
+                </div>
+              </div>
+
+              {/* Nginx Reverse Proxy */}
+              <div className="space-y-4">
+                <h3 className="text-2xl font-semibold text-zinc-100">Nginx Reverse Proxy</h3>
+                <div className="text-zinc-400 leading-relaxed space-y-3">
+                  <p>
+                    Nginx acts as the single entry point for HTTPS traffic from the Cloudflare Tunnel. It routes requests to internal services and applications based on the Host header, enabling multiple services to share the same external port (443).
+                  </p>
+                  <p>
+                    Example server block structure:
+                  </p>
+                  <div className="bg-zinc-950 border border-zinc-800 rounded-lg p-6 overflow-x-auto">
+                    <pre className="text-sm text-zinc-300 font-mono">
+                      {`# Reverse proxy hardening (excerpt)
+server_tokens off;
+
+# Preserve real client IP from Cloudflare Tunnel
+real_ip_header CF-Connecting-IP;
+
+# Basic rate limiting
+limit_req_zone $binary_remote_addr zone=global:20m rate=10r/s;
+
+# TLS termination at Nginx (origin)
+ssl_protocols TLSv1.2 TLSv1.3;
+ssl_prefer_server_ciphers off;
+`}
+                    </pre>
+                  </div>
+                </div>
+              </div>
+
+              {/* TLS & Certificates */}
+              <div className="space-y-4">
+                <h3 className="text-2xl font-semibold text-zinc-100">TLS & Certificates</h3>
+                <div className="text-zinc-400 leading-relaxed space-y-3">
+                  <p>
+                    Cloudflare CA Origin Certificates are used to secure the connection between Cloudflare and the local server. Public TLS termination occurs at Cloudflare's edge, with origin certificates securing the tunnel-to-Nginx connection.
+                  </p>
+                  <p>
+                    This setup provides end-to-end encryption: <span className="text-cyan-400 font-mono text-sm">Browser → Cloudflare (public cert) → Tunnel (encrypted) → Nginx (origin cert) → Services</span>
+                  </p>
+                </div>
+              </div>
+
+              {/* Services Hosted */}
+              <div className="space-y-4">
+                <h3 className="text-2xl font-semibold text-zinc-100">Services Hosted</h3>
+                <div className="text-zinc-400 leading-relaxed">
+                  <p className="mb-4">The infrastructure currently hosts the following services:</p>
+                  <ul className="space-y-2 list-disc list-inside text-zinc-400">
+                    <li><span className="text-zinc-300 font-medium">Nextcloud</span> - Self-hosted cloud storage and collaboration platform</li>
+                    <li><span className="text-zinc-300 font-medium">n8n</span> - Workflow automation and integration platform</li>
+                    <li><span className="text-zinc-300 font-medium">Plausible Analytics</span> - Privacy-focused web analytics</li>
+                    <li><span className="text-zinc-300 font-medium">Code Server</span> - Web-based VS Code instance</li>
+                    <li><span className="text-zinc-300 font-medium">Multiple custom applications</span> - Frontend and backend services for various projects</li>
+                  </ul>
+                  <p className="mt-4">
+                    All services run on a private internal network and are only accessible via the reverse proxy. Direct access to service ports is blocked by the host firewall.
+                  </p>
+                </div>
+              </div>
+
+              {/* Security Notes */}
+              <div className="space-y-4">
+                <h3 className="text-2xl font-semibold text-zinc-100">Security Notes</h3>
+                <div className="text-zinc-400 leading-relaxed">
+                  <ul className="space-y-3">
+                    <li className="flex items-start gap-3">
+                      <span className="text-emerald-400 flex-shrink-0 mt-1">✓</span>
+                      <span><span className="text-zinc-300 font-medium">No inbound ports exposed</span> - All services are accessible only through Cloudflare Tunnel</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="text-emerald-400 flex-shrink-0 mt-1">✓</span>
+                      <span><span className="text-zinc-300 font-medium">Firewall enabled</span> - Nginx L7 firewall& UFW configured to block unauthorized access to service ports</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="text-emerald-400 flex-shrink-0 mt-1">✓</span>
+                      <span><span className="text-zinc-300 font-medium">Internal service isolation</span> - Services run in isolated containers with minimal privileges</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="text-emerald-400 flex-shrink-0 mt-1">✓</span>
+                      <span><span className="text-zinc-300 font-medium">TLS encryption</span> - End-to-end encryption from browser to internal services</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section></>
+
       {/* Philosophy Section */}
       <section className="relative px-4 py-24 bg-zinc-900/30">
         <div className="max-w-4xl mx-auto">
@@ -310,221 +490,40 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Server Infrastructure Documentation */}
+
       <section className="relative px-4 py-24">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-5xl font-bold mb-4 bg-gradient-to-br from-zinc-100 to-zinc-400 bg-clip-text text-transparent">Server Infrastructure</h2>
-            <p className="text-zinc-500 text-lg">Technical documentation of the self-hosted setup</p>
-          </div>
-
-          <div className="space-y-12 text-zinc-300">
-            {/* Overview */}
-            <div className="space-y-4">
-              <h3 className="text-2xl font-semibold text-zinc-100">Overview</h3>
-              <div className="text-zinc-400 leading-relaxed space-y-3">
-                <p>
-                  This is a local self-hosted server used for learning, experimentation, and running real production services. The infrastructure provides hands-on experience with system administration, networking, and DevOps practices while serving actual applications to users.
-                </p>
-                <p>
-                  Services are exposed securely to the internet using Cloudflare Tunnel without opening any inbound ports on the router or firewall. This eliminates the need for port forwarding and provides an additional layer of security through Cloudflare's edge network.
-                </p>
+            <div className="max-w-5xl mx-auto text-center">
+              <div className="flex flex-wrap items-center justify-center gap-8 text-zinc-500">
+                <span className="text-sm font-medium tracking-wide hover:text-zinc-300 transition-colors cursor-default">
+                  Docker
+                </span>
+                <span className="text-zinc-700">·</span>
+                <span className="text-sm font-medium tracking-wide hover:text-zinc-300 transition-colors cursor-default">
+                  Linux
+                </span>
+                <span className="text-zinc-700">·</span>
+                <span className="text-sm font-medium tracking-wide hover:text-zinc-300 transition-colors cursor-default">
+                  FastAPI
+                </span>
+                <span className="text-zinc-700">·</span>
+                <span className="text-sm font-medium tracking-wide hover:text-zinc-300 transition-colors cursor-default">
+                  React
+                </span>
+                <span className="text-zinc-700">·</span>
+                <span className="text-sm font-medium tracking-wide hover:text-zinc-300 transition-colors cursor-default">
+                  Flutter
+                </span>
+                <span className="text-zinc-700">·</span>
+                <span className="text-sm font-medium tracking-wide hover:text-zinc-300 transition-colors cursor-default">
+                  CI/CD
+                </span>
+                <span className="text-zinc-700">·</span>
+                <span className="text-sm font-medium tracking-wide hover:text-zinc-300 transition-colors cursor-default">
+                  Cloudflare
+                </span>
               </div>
             </div>
-
-            {/* Architecture Overview */}
-            <div className="space-y-4">
-              <h3 className="text-2xl font-semibold text-zinc-100">Architecture Overview</h3>
-              <div className="text-zinc-400 leading-relaxed space-y-3">
-                <p>
-                  The request flow follows this path: <span className="text-cyan-400 font-mono text-sm">Users → Cloudflare Edge → Cloudflare Tunnel → Nginx Reverse Proxy → Internal Services</span>
-                </p>
-                <p>
-                  Cloudflare acts as the public-facing endpoint, routing requests through an encrypted tunnel to the local server. Nginx then handles internal routing to appropriate services based on hostname and path.
-                </p>
-                <div className="w-full">
-                  <img 
-                    src="/cloud-infrastructure.png" 
-                    alt="Server Infrastructure Architecture Diagram"
-                    className="w-full h-auto"
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Networking & Exposure */}
-            <div className="space-y-4">
-              <h3 className="text-2xl font-semibold text-zinc-100">Networking & Exposure</h3>
-              <div className="text-zinc-400 leading-relaxed space-y-3">
-                <p>
-                  Cloudflare Tunnel (cloudflared) is configured to map multiple subdomains to internal services. The tunnel daemon runs locally and maintains persistent connections to Cloudflare's edge network, eliminating the need for publicly exposed IP addresses or open inbound ports.
-                </p>
-                <p>
-                  Most hostnames terminate at <span className="text-cyan-400 font-mono text-sm">localhost:443</span>, where Nginx handles reverse proxying based on the Host header. Some services connect directly to their specific ports for performance or compatibility reasons.
-                </p>
-              </div>
-            </div>
-
-            {/* cloudflared Configuration */}
-            <div className="space-y-4">
-              <h3 className="text-2xl font-semibold text-zinc-100">cloudflared Configuration (Simplified)</h3>
-              <div className="text-zinc-400 leading-relaxed space-y-3">
-                <p className="text-sm text-zinc-500 italic">
-                  Note: This configuration is a real-world but sanitized example showing how subdomains are mapped to internal services.
-                </p>
-                <div className="bg-zinc-950 border border-zinc-800 rounded-lg p-6 overflow-x-auto">
-                  <pre className="text-sm text-zinc-300 font-mono">
-{`ingress:
-  - hostname: server.luckylinux.dev
-    service: https://localhost:443
-  - hostname: railsplit-server.luckylinux.dev
-    service: http://127.0.0.1:3108
-  - hostname: n8n.luckylinux.dev
-    service: https://localhost:443
-  - hostname: chronocare-server.luckylinux.dev
-    service: http://127.0.0.1:3102
-  - hostname: code.luckylinux.dev
-    service: https://localhost:443
-  - hostname: analytics.luckylinux.dev
-    service: https://localhost:443
-  - hostname: ssh.luckylinux.dev
-    service: ssh://localhost:22 #(secured)
-  - hostname: openwisp2.luckylinux.dev
-    service: http://127.0.0.1:80
-  - hostname: cloud.luckylinux.dev
-    service: https://localhost:443
-  - service: http_status:404`}
-                  </pre>
-                </div>
-                <p className="text-sm text-zinc-500">
-                  Internal routing to specific applications is handled by Nginx, not by cloudflared. The tunnel daemon simply forwards requests to the appropriate local port.
-                </p>
-              </div>
-            </div>
-
-            {/* Nginx Reverse Proxy */}
-            <div className="space-y-4">
-              <h3 className="text-2xl font-semibold text-zinc-100">Nginx Reverse Proxy</h3>
-              <div className="text-zinc-400 leading-relaxed space-y-3">
-                <p>
-                  Nginx acts as the single entry point for HTTPS traffic from the Cloudflare Tunnel. It routes requests to internal services and applications based on the Host header, enabling multiple services to share the same external port (443).
-                </p>
-                <p>
-                  Example server block structure:
-                </p>
-                <div className="bg-zinc-950 border border-zinc-800 rounded-lg p-6 overflow-x-auto">
-                  <pre className="text-sm text-zinc-300 font-mono">
-{`# Reverse proxy hardening (excerpt)
-server_tokens off;
-
-# Preserve real client IP from Cloudflare Tunnel
-real_ip_header CF-Connecting-IP;
-
-# Basic rate limiting
-limit_req_zone $binary_remote_addr zone=global:20m rate=10r/s;
-
-# TLS termination at Nginx (origin)
-ssl_protocols TLSv1.2 TLSv1.3;
-ssl_prefer_server_ciphers off;
-`}
-                  </pre>
-                </div>
-              </div>
-            </div>
-
-            {/* TLS & Certificates */}
-            <div className="space-y-4">
-              <h3 className="text-2xl font-semibold text-zinc-100">TLS & Certificates</h3>
-              <div className="text-zinc-400 leading-relaxed space-y-3">
-                <p>
-                  Cloudflare CA Origin Certificates are used to secure the connection between Cloudflare and the local server. Public TLS termination occurs at Cloudflare's edge, with origin certificates securing the tunnel-to-Nginx connection.
-                </p>
-                <p>
-                  This setup provides end-to-end encryption: <span className="text-cyan-400 font-mono text-sm">Browser → Cloudflare (public cert) → Tunnel (encrypted) → Nginx (origin cert) → Services</span>
-                </p>
-              </div>
-            </div>
-
-            {/* Services Hosted */}
-            <div className="space-y-4">
-              <h3 className="text-2xl font-semibold text-zinc-100">Services Hosted</h3>
-              <div className="text-zinc-400 leading-relaxed">
-                <p className="mb-4">The infrastructure currently hosts the following services:</p>
-                <ul className="space-y-2 list-disc list-inside text-zinc-400">
-                  <li><span className="text-zinc-300 font-medium">Nextcloud</span> - Self-hosted cloud storage and collaboration platform</li>
-                  <li><span className="text-zinc-300 font-medium">n8n</span> - Workflow automation and integration platform</li>
-                  <li><span className="text-zinc-300 font-medium">Plausible Analytics</span> - Privacy-focused web analytics</li>
-                  <li><span className="text-zinc-300 font-medium">Code Server</span> - Web-based VS Code instance</li>
-                  <li><span className="text-zinc-300 font-medium">Multiple custom applications</span> - Frontend and backend services for various projects</li>
-                </ul>
-                <p className="mt-4">
-                  All services run on a private internal network and are only accessible via the reverse proxy. Direct access to service ports is blocked by the host firewall.
-                </p>
-              </div>
-            </div>
-
-            {/* Security Notes */}
-            <div className="space-y-4">
-              <h3 className="text-2xl font-semibold text-zinc-100">Security Notes</h3>
-              <div className="text-zinc-400 leading-relaxed">
-                <ul className="space-y-3">
-                  <li className="flex items-start gap-3">
-                    <span className="text-emerald-400 flex-shrink-0 mt-1">✓</span>
-                    <span><span className="text-zinc-300 font-medium">No inbound ports exposed</span> - All services are accessible only through Cloudflare Tunnel</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <span className="text-emerald-400 flex-shrink-0 mt-1">✓</span>
-                    <span><span className="text-zinc-300 font-medium">Firewall enabled</span> - Nginx L7 firewall& UFW configured to block unauthorized access to service ports</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <span className="text-emerald-400 flex-shrink-0 mt-1">✓</span>
-                    <span><span className="text-zinc-300 font-medium">Internal service isolation</span> - Services run in isolated containers with minimal privileges</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <span className="text-emerald-400 flex-shrink-0 mt-1">✓</span>
-                    <span><span className="text-zinc-300 font-medium">TLS encryption</span> - End-to-end encryption from browser to internal services</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Tech Stack Section */}
-      <section className="relative px-4 py-24">
-        <div className="max-w-5xl mx-auto text-center">
-          <div className="flex flex-wrap items-center justify-center gap-8 text-zinc-500">
-            <span className="text-sm font-medium tracking-wide hover:text-zinc-300 transition-colors cursor-default">
-              Docker
-            </span>
-            <span className="text-zinc-700">·</span>
-            <span className="text-sm font-medium tracking-wide hover:text-zinc-300 transition-colors cursor-default">
-              Linux
-            </span>
-            <span className="text-zinc-700">·</span>
-            <span className="text-sm font-medium tracking-wide hover:text-zinc-300 transition-colors cursor-default">
-              FastAPI
-            </span>
-            <span className="text-zinc-700">·</span>
-            <span className="text-sm font-medium tracking-wide hover:text-zinc-300 transition-colors cursor-default">
-              React
-            </span>
-            <span className="text-zinc-700">·</span>
-            <span className="text-sm font-medium tracking-wide hover:text-zinc-300 transition-colors cursor-default">
-              Flutter
-            </span>
-            <span className="text-zinc-700">·</span>
-            <span className="text-sm font-medium tracking-wide hover:text-zinc-300 transition-colors cursor-default">
-              CI/CD
-            </span>
-            <span className="text-zinc-700">·</span>
-            <span className="text-sm font-medium tracking-wide hover:text-zinc-300 transition-colors cursor-default">
-              Cloudflare
-            </span>
-          </div>
-        </div>
-      </section>
+          </section>
 
       {/* Footer */}
       <footer className="relative px-4 py-16 border-t border-zinc-800">
