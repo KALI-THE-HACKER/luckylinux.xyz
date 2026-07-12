@@ -1,21 +1,31 @@
-import { dirname } from "path";
-import { fileURLToPath } from "url";
-import { FlatCompat } from "@eslint/eslintrc";
+import { defineConfig } from 'eslint/config'
+import nextVitals from 'eslint-config-next/core-web-vitals'
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const eslintConfig = defineConfig([
+  // Define project-wide global ignores
+  {
+    ignores: [
+      '.next/**',
+      'out/**',
+      'build/**',
+      'next-env.d.ts',
+      'node_modules/**',
+    ]
+  },
 
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
+  // Inject the Next.js core web vitals configurations
+  ...nextVitals, 
 
-const eslintConfig = [
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
+  // Custom rule overrides
   {
     rules: {
+      "react/no-unescaped-entities": "off",
+      "@next/next/no-img-element": "off",
+      "@next/next/next-script-for-ga": "off",
+      "react-hooks/set-state-in-effect": "off",
       "@typescript-eslint/no-unused-vars": "off",
-    },
-  },
-];
+    }
+  }
+])
 
-export default eslintConfig;
+export default eslintConfig

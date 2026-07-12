@@ -1,40 +1,24 @@
 import Link from "next/link"
-import { ArrowLeft, Cloud, Check, Shield, Lock, Zap, HardDrive } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { ArrowLeft, Cloud, Check, Shield, Lock, Zap, HardDrive, Terminal, ExternalLink } from "lucide-react"
 
 export default function CloudStoragePage() {
-  const createMailtoLink = (plan: string, price: string, storage: string) => {
-    const subject = `Cloud Storage - ${plan} Plan Inquiry`
+  const createMailtoLink = () => {
+    const subject = `Nextcloud Storage Collaboration Request`
     const body = `Hi,
 
-I am interested in subscribing to the ${plan} Plan for Cloud Storage.
-
-Plan Details:
-- Plan: ${plan}
-- Price: ${price}
-- Storage: ${storage}
-
-Please provide me with:
-- Setup instructions
-- Payment process
-- Account activation timeline
-
-My Details:
-Name: 
-Email: 
-Phone: 
+I am interested in collaborating or setting up a shared folder/volume on your self-hosted Nextcloud instance.
 
 Thank you!`
-    
-    return `mailto:purchases@luckylinux.dev?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+
+    return `mailto:admin@luckylinux.dev?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-zinc-950 via-zinc-900 to-zinc-950 text-zinc-100">
+    <div className="min-h-screen bg-[#F9F7F3] text-[#1C1C1C] flex flex-col font-sans selection:bg-[#B36A2E]/10 selection:text-[#B36A2E]">
       {/* Header */}
-      <header className="relative px-4 py-6 border-b border-zinc-800/50">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 text-zinc-400 hover:text-zinc-100 transition-colors">
+      <header className="relative px-6 py-6 border-b border-[rgba(0,0,0,0.08)] bg-[#F9F7F3] z-10 select-none">
+        <div className="max-w-5xl mx-auto flex items-center justify-between">
+          <Link href="/#infrastructure" className="flex items-center gap-2 text-[#66635F] hover:text-[#1C1C1C] transition-colors">
             <ArrowLeft className="w-4 h-4" />
             <span className="text-sm font-medium">Back to Home</span>
           </Link>
@@ -42,278 +26,158 @@ Thank you!`
       </header>
 
       {/* Hero Section */}
-      <section className="relative px-4 py-20">
-        <div className="max-w-4xl mx-auto text-center">
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-indigo-500/10 mb-6">
-            <Cloud className="w-10 h-10 text-indigo-400" />
+      <section className="relative px-6 py-20 text-center">
+        <div className="max-w-3xl mx-auto space-y-6">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full border border-[rgba(0,0,0,0.12)] text-[#B36A2E] bg-[#F6F3ED] mb-2">
+            <Cloud className="w-8 h-8" />
           </div>
-          <h1 className="text-4xl md:text-6xl font-bold mb-4 bg-gradient-to-br from-zinc-100 to-zinc-400 bg-clip-text text-transparent">
-            Cloud Storage
+          <h1 className="text-4xl md:text-6xl text-[#1C1C1C] font-serif font-normal">
+            Nextcloud Storage
           </h1>
-          <p className="text-xl text-zinc-400 mb-2">Your Private Cloud, Your Control</p>
-          <p className="text-lg text-emerald-400 font-semibold">Starting at just ₹29/month</p>
+          <p className="text-xl text-[#66635F] font-light max-w-lg mx-auto">
+            Secure, fully encrypted file storage, WebDAV mounts, and document synchronization hosted on my private server.
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm font-mono uppercase tracking-wider text-[#66635F]">
+            <span className="text-[#B36A2E] font-semibold">Self-Hosted Infrastructure</span>
+            <span className="hidden sm:inline text-gray-300">•</span>
+            <a
+              href="https://nextcloud.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-[#B36A2E] flex items-center gap-1.5 transition-colors border-b border-transparent hover:border-[#B36A2E] pb-0.5"
+            >
+              Official Project <ExternalLink className="w-3.5 h-3.5" />
+            </a>
+          </div>
         </div>
       </section>
 
       {/* Main Content */}
-      <section className="relative px-4 py-12">
+      <section className="relative px-6 py-12 flex-1">
         <div className="max-w-4xl mx-auto space-y-16">
           {/* Overview */}
-          <div className="space-y-6">
-            <h2 className="text-3xl font-bold text-zinc-100">What You Get</h2>
-            <p className="text-lg text-zinc-400 leading-relaxed">
-              Get your own secure, encrypted cloud storage space with all the features you expect from services like Google Drive—but completely private, self-hosted, and under your control. Perfect for personal use, small businesses, or anyone who values data privacy.
+          <div className="space-y-4">
+            <h2 className="text-3xl text-[#1C1C1C] font-serif font-normal">Overview</h2>
+            <p className="text-[16px] md:text-[17px] text-[#66635F] font-light leading-relaxed">
+              Nextcloud provides a private, fully featured cloud storage ecosystem hosted entirely on my own local dedicated hardware. It ensures absolute data sovereignty, eliminating third-party data crawling or telemetry. For developers, Nextcloud offers a unified file storage hub that can be integrated directly with command line sync tools, automated shell backups, and WebDAV api mounts.
             </p>
           </div>
 
-          {/* Features */}
+          {/* How It's Helpful for Developers */}
           <div className="space-y-6">
-            <h2 className="text-3xl font-bold text-zinc-100">Key Features</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <h2 className="text-3xl text-[#1C1C1C] font-serif font-normal">Developer Utility & Documentation</h2>
+            <div className="bg-[#F6F3ED] border border-[rgba(0,0,0,0.08)] rounded-md p-8 space-y-6">
               <div className="flex gap-4">
                 <div className="flex-shrink-0">
-                  <div className="w-10 h-10 rounded-lg bg-indigo-500/10 flex items-center justify-center">
-                    <Shield className="w-5 h-5 text-indigo-400" />
+                  <div className="w-10 h-10 rounded-md border border-[rgba(0,0,0,0.08)] bg-[#F6F3ED] flex items-center justify-center text-[#B36A2E]">
+                    <Terminal className="w-5 h-5" />
                   </div>
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-zinc-100 mb-2">End-to-End Encryption</h3>
-                  <p className="text-zinc-500">Your files are encrypted both in transit and at rest. Only you have access to your data.</p>
+                  <h3 className="text-lg font-medium text-[#1C1C1C] mb-1">WebDAV & CLI Ingestion</h3>
+                  <p className="text-[#66635F] font-light text-[15px] leading-relaxed">
+                    Nextcloud exposes standard WebDAV interfaces. Developers can mount their cloud directories directly inside headless server scripts, curl backups, or mount points (e.g. using <code>rclone</code> or <code>davfs2</code>) to manage project assets, database dumps, and deployment archives securely.
+                  </p>
                 </div>
               </div>
 
               <div className="flex gap-4">
                 <div className="flex-shrink-0">
-                  <div className="w-10 h-10 rounded-lg bg-indigo-500/10 flex items-center justify-center">
-                    <Lock className="w-5 h-5 text-indigo-400" />
+                  <div className="w-10 h-10 rounded-md border border-[rgba(0,0,0,0.08)] bg-[#F6F3ED] flex items-center justify-center text-[#B36A2E]">
+                    <HardDrive className="w-5 h-5" />
                   </div>
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-zinc-100 mb-2">Complete Privacy</h3>
-                  <p className="text-zinc-500">No third-party access. Your files stay on dedicated infrastructure under your control.</p>
+                  <h3 className="text-lg font-medium text-[#1C1C1C] mb-1">Automated Backups & Sync</h3>
+                  <p className="text-[#66635F] font-light text-[15px] leading-relaxed">
+                    Maintains persistent, encrypted backups of client logs and database states. With native Nextcloud clients for Linux, macOS, Windows, iOS, and Android, local workstation files stay synchronized without running continuous manual uploads.
+                  </p>
                 </div>
               </div>
 
               <div className="flex gap-4">
                 <div className="flex-shrink-0">
-                  <div className="w-10 h-10 rounded-lg bg-indigo-500/10 flex items-center justify-center">
-                    <Zap className="w-5 h-5 text-indigo-400" />
+                  <div className="w-10 h-10 rounded-md border border-[rgba(0,0,0,0.08)] bg-[#F6F3ED] flex items-center justify-center text-[#B36A2E]">
+                    <Lock className="w-5 h-5" />
                   </div>
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-zinc-100 mb-2">Fast & Reliable</h3>
-                  <p className="text-zinc-500">Quick uploads, downloads, and file syncing across all your devices.</p>
-                </div>
-              </div>
-
-              <div className="flex gap-4">
-                <div className="flex-shrink-0">
-                  <div className="w-10 h-10 rounded-lg bg-indigo-500/10 flex items-center justify-center">
-                    <HardDrive className="w-5 h-5 text-indigo-400" />
-                  </div>
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-zinc-100 mb-2">Flexible Storage</h3>
-                  <p className="text-zinc-500">Multiple storage tiers available to fit your needs and budget.</p>
+                  <h3 className="text-lg font-medium text-[#1C1C1C] mb-1">Data Sovereignty & Encryption</h3>
+                  <p className="text-[#66635F] font-light text-[15px] leading-relaxed">
+                    Files are encrypted in transit via SSL/TLS and stored on local encrypted volume mounts. By self-hosting Nextcloud on my own server, I prevent external platforms from indexing codebases, sensitive client datasets, or internal documentation.
+                  </p>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Pricing Plans */}
+          {/* Key Features */}
           <div className="space-y-6">
-            <h2 className="text-3xl font-bold text-zinc-100 text-center">Subscription Plans</h2>
-            <p className="text-zinc-400 text-center mb-8">Choose the plan that fits your needs</p>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {/* Free Trial */}
-              <a href={createMailtoLink("Free Trial", "Free for 3 months", "2GB")} className="group">
-                <div className="bg-zinc-900/30 border border-zinc-800 hover:border-emerald-500/50 rounded-2xl p-6 flex flex-col transition-all duration-300 hover:shadow-lg hover:shadow-emerald-500/10 cursor-pointer h-full">
-                  <div className="mb-4">
-                    <h3 className="text-xl font-bold text-zinc-100 mb-2">Free Trial</h3>
-                    <div className="flex items-baseline gap-1">
-                      <span className="text-3xl font-bold text-emerald-400">Free</span>
-                    </div>
-                    <p className="text-sm text-zinc-500 mt-1">For 3 months</p>
-                  </div>
-                  <ul className="space-y-3 mb-6 flex-1">
-                    <li className="flex items-start gap-2">
-                      <Check className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
-                      <span className="text-sm text-zinc-400">2GB storage</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <Check className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
-                      <span className="text-sm text-zinc-400">Web access</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <Check className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
-                      <span className="text-sm text-zinc-400">Mobile apps</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <Check className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
-                      <span className="text-sm text-zinc-400">Email support</span>
-                    </li>
-                  </ul>
-                  <div className="pt-4 border-t border-zinc-800">
-                    <p className="text-xs text-zinc-600 text-center group-hover:text-emerald-400 transition-colors">Click to subscribe →</p>
+            <h2 className="text-3xl text-[#1C1C1C] font-serif font-normal">Key Features</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="flex gap-4">
+                <div className="flex-shrink-0">
+                  <div className="w-10 h-10 rounded-md border border-[rgba(0,0,0,0.08)] bg-[#F6F3ED] flex items-center justify-center text-[#B36A2E]">
+                    <Shield className="w-5 h-5" />
                   </div>
                 </div>
-              </a>
+                <div>
+                  <h3 className="text-lg font-medium text-[#1C1C1C] mb-1">End-to-End Encryption</h3>
+                  <p className="text-[#66635F] font-light text-[15px] leading-relaxed">Protects documents and resources behind server-side encryption layers and secure passwords.</p>
+                </div>
+              </div>
 
-              {/* Basic Plan */}
-              <a href={createMailtoLink("Basic", "₹29/month", "10GB")} className="group">
-                <div className="bg-zinc-900/30 border border-zinc-800 hover:border-indigo-500/50 rounded-2xl p-6 flex flex-col transition-all duration-300 hover:shadow-lg hover:shadow-indigo-500/10 cursor-pointer h-full">
-                  <div className="mb-4">
-                    <h3 className="text-xl font-bold text-zinc-100 mb-2">Basic</h3>
-                    <div className="flex items-baseline gap-1">
-                      <span className="text-3xl font-bold text-indigo-400">₹29</span>
-                      <span className="text-zinc-500">/month</span>
-                    </div>
-                  </div>
-                  <ul className="space-y-3 mb-6 flex-1">
-                    <li className="flex items-start gap-2">
-                      <Check className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
-                      <span className="text-sm text-zinc-400">10GB storage</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <Check className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
-                      <span className="text-sm text-zinc-400">All free features</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <Check className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
-                      <span className="text-sm text-zinc-400">File versioning</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <Check className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
-                      <span className="text-sm text-zinc-400">Password-protected shares</span>
-                    </li>
-                  </ul>
-                  <div className="pt-4 border-t border-zinc-800">
-                    <p className="text-xs text-zinc-600 text-center group-hover:text-indigo-400 transition-colors">Click to subscribe →</p>
+              <div className="flex gap-4">
+                <div className="flex-shrink-0">
+                  <div className="w-10 h-10 rounded-md border border-[rgba(0,0,0,0.08)] bg-[#F6F3ED] flex items-center justify-center text-[#B36A2E]">
+                    <HardDrive className="w-5 h-5" />
                   </div>
                 </div>
-              </a>
-
-              {/* Pro Plan */}
-              <a href={createMailtoLink("Pro", "₹99/month", "50GB")} className="group">
-                <div className="bg-gradient-to-br from-indigo-500/10 to-purple-500/10 border-2 border-indigo-500/50 hover:border-indigo-400 rounded-2xl p-6 flex flex-col relative transition-all duration-300 hover:shadow-xl hover:shadow-indigo-500/20 cursor-pointer h-full">
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-indigo-500 text-white text-xs font-bold rounded-full">
-                    POPULAR
-                  </div>
-                  <div className="mb-4">
-                    <h3 className="text-xl font-bold text-zinc-100 mb-2">Pro</h3>
-                    <div className="flex items-baseline gap-1">
-                      <span className="text-3xl font-bold text-indigo-400">₹99</span>
-                      <span className="text-zinc-500">/month</span>
-                    </div>
-                  </div>
-                  <ul className="space-y-3 mb-6 flex-1">
-                    <li className="flex items-start gap-2">
-                      <Check className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
-                      <span className="text-sm text-zinc-300">50GB storage</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <Check className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
-                      <span className="text-sm text-zinc-300">All Basic features</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <Check className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
-                      <span className="text-sm text-zinc-300">Priority support</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <Check className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
-                      <span className="text-sm text-zinc-300">Advanced file sharing</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <Check className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
-                      <span className="text-sm text-zinc-300">30-day version history</span>
-                    </li>
-                  </ul>
-                  <div className="pt-4 border-t border-indigo-500/30">
-                    <p className="text-xs text-zinc-500 text-center group-hover:text-indigo-300 transition-colors">Click to subscribe →</p>
-                  </div>
+                <div>
+                  <h3 className="text-lg font-medium text-[#1C1C1C] mb-1">Collaborative Workspaces</h3>
+                  <p className="text-[#66635F] font-light text-[15px] leading-relaxed">Includes Nextcloud Office to edit configuration files, markdown docs, and planning lists collaboratively.</p>
                 </div>
-              </a>
-            </div>
-
-            <div className="text-center mt-8">
-              <p className="text-sm text-zinc-500">Need more storage? <span className="text-indigo-400 font-medium"><a href={createMailtoLink("Custom", "Custom Pricing", "Custom Storage")}>Contact us for Custom Plan</a></span></p>
+              </div>
             </div>
           </div>
 
-          {/* What's Included */}
+          {/* Info Details */}
           <div className="space-y-6">
-            <h2 className="text-3xl font-bold text-zinc-100">What's Included</h2>
-            <div className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-8">
-              <ul className="space-y-4">
-                <li className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
-                  <span className="text-zinc-300">Personal cloud storage space (customizable size)</span>
+            <h2 className="text-3xl text-[#1C1C1C] font-serif font-normal">Self-Hosted Ecosystem</h2>
+            <div className="bg-[#F6F3ED] border border-[rgba(0,0,0,0.08)] rounded-md p-8">
+              <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 text-[#66635F] font-light text-[15px]">
+                <li className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-[#B36A2E]" />
+                  <span>Dedicated Nextcloud account provision</span>
                 </li>
-                <li className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
-                  <span className="text-zinc-300">Web interface for file management</span>
+                <li className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-[#B36A2E]" />
+                  <span>Desktop & mobile sync support</span>
                 </li>
-                <li className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
-                  <span className="text-zinc-300">Android and iOS app for seamless access</span>
+                <li className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-[#B36A2E]" />
+                  <span>Automated database/file backups</span>
                 </li>
-                <li className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
-                  <span className="text-zinc-300">File sharing with password protection</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
-                  <span className="text-zinc-300">Desktop and mobile sync clients</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
-                  <span className="text-zinc-300">Automatic backup and versioning</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
-                  <span className="text-zinc-300">99.9% uptime guarantee</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
-                  <span className="text-zinc-300">Email support</span>
+                <li className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-[#B36A2E]" />
+                  <span>Password-secured share links</span>
                 </li>
               </ul>
             </div>
           </div>
 
-          {/* Use Cases */}
-          <div className="space-y-6">
-            <h2 className="text-3xl font-bold text-zinc-100">Perfect For</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="bg-zinc-900/30 border border-zinc-800 rounded-xl p-6">
-                <h3 className="text-lg font-semibold text-zinc-100 mb-2">Personal Use</h3>
-                <p className="text-zinc-500 text-sm">Store photos, documents, and backups securely</p>
-              </div>
-              <div className="bg-zinc-900/30 border border-zinc-800 rounded-xl p-6">
-                <h3 className="text-lg font-semibold text-zinc-100 mb-2">Small Business</h3>
-                <p className="text-zinc-500 text-sm">Share files with team members privately</p>
-              </div>
-              <div className="bg-zinc-900/30 border border-zinc-800 rounded-xl p-6">
-                <h3 className="text-lg font-semibold text-zinc-100 mb-2">Developers</h3>
-                <p className="text-zinc-500 text-sm">Store project files and code repositories</p>
-              </div>
-            </div>
-          </div>
-
-          {/* CTA */}
-          <div className="bg-gradient-to-br from-indigo-500/10 to-purple-500/10 border border-indigo-500/20 rounded-2xl p-12 text-center">
-            <h2 className="text-3xl font-bold mb-4">Need a Custom Plan?</h2>
-            <p className="text-zinc-400 mb-8 max-w-2xl mx-auto">
-              If you need more storage or have specific requirements, we can create a custom plan tailored to your needs.
+          {/* CTA Box */}
+          <div className="bg-[#F6F3ED] border border-[rgba(0,0,0,0.08)] rounded-md p-10 text-center space-y-6">
+            <h3 className="text-2xl text-[#1C1C1C] font-serif font-normal">Need Shared Developer Volumes?</h3>
+            <p className="text-[#66635F] font-light max-w-xl mx-auto text-[15px]">
+              If you are working on projects with me and need a shared space or WebDAV target folder for database backups, feel free to contact me to configure a partition.
             </p>
-            <Button
-              size="lg"
-              className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white hover:from-indigo-600 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-indigo-500/20 border-0"
-              asChild
+            <a
+              href={createMailtoLink()}
+              className="inline-flex items-center justify-center px-6 py-3.5 text-[14px] font-medium bg-[#1C1C1C] text-[#F9F7F3] rounded-md hover:bg-[#2c2c2c] transition-all hover:scale-[1.02] duration-200"
             >
-              <a href={createMailtoLink("Custom", "Custom Pricing", "Custom Storage")}>Contact for Custom Plan</a>
-            </Button>
+              Get in Touch
+            </a>
           </div>
         </div>
       </section>

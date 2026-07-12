@@ -1,15 +1,11 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Geist, Geist_Mono } from "next/font/google"
 import "./globals.css"
 
-const _geist = Geist({ subsets: ["latin"] })
-const _geistMono = Geist_Mono({ subsets: ["latin"] })
-
 export const metadata: Metadata = {
-  title: "Luckylinux's Self-Hosted Universe",
+  title: "Luckylinux's Portfolio",
   description:
-    "Things I build. Things I host. Things I run. A collection of self-hosted systems, applications, and experiments running on personal infrastructure.",
+    "Personal portfolio and self-hosted showcase of Lucky Verma, a backend and infrastructure engineer.",
   icons: {
     icon: [
       {
@@ -37,7 +33,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        {/* Plausible Analytics */}
         <script defer data-domain="luckylinux.dev" src="https://analytics.luckylinux.dev/js/script.js"></script>
+        {/* Google Analytics */}
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-003H5Y5G7G"></script>
         <script
           dangerouslySetInnerHTML={{
@@ -50,7 +48,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="font-sans antialiased">
+      <body className="font-sans antialiased text-[#1C1C1C] bg-[#F9F7F3]">
         {children}
       </body>
     </html>

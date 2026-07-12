@@ -1,334 +1,738 @@
+"use client"
+
+import React, { useState } from "react"
 import Link from "next/link"
-import { ArrowRight, Github, Linkedin, FileText, Lock, Code2, Cloud, BarChart3, Workflow, Mail } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import {
+  ArrowRight,
+  ArrowUpRight,
+  Github,
+  Linkedin,
+  Mail,
+  Terminal,
+  ShieldCheck,
+  Sun,
+  Moon,
+  ExternalLink
+} from "lucide-react"
+
+import { Navbar } from "@/components/editorial/Navbar"
+import { Hero } from "@/components/editorial/Hero"
+import { Section } from "@/components/editorial/Section"
+import { SectionHeading } from "@/components/editorial/SectionHeading"
+import { ProjectCard } from "@/components/editorial/ProjectCard"
+import { Timeline } from "@/components/editorial/Timeline"
+import { Footer } from "@/components/editorial/Footer"
+import { Container } from "@/components/editorial/Container"
+import { AnimatedText } from "@/components/editorial/AnimatedText"
 
 export default function Home() {
+  const projects = [
+    {
+      name: "OpportuneAI",
+      description: "An AI-powered job discovery and application copilot that aggregates opportunities from multiple job platforms and transforms unstructured listings into structured, searchable data. It combines large language models with an intelligent background worker pipeline to recommend the most relevant opportunities based on a candidate's resume, skills, and preferences.",
+      tags: ["FastAPI", "LangChain", "LangGraph", "PostgreSQL", "Playwright", "Redis", "RQ", "Gemini", "OpenRouter"],
+      githubUrl: "https://github.com/KALI-THE-HACKER/OpportuneAI",
+      outcome: "Architected a modular AI-powered job aggregation platform featuring provider-based ingestion, content-hash deduplication, asynchronous processing with Redis Queue, and resume-aware job ranking.",
+      imageUrl: "placeholder",
+      status: "Under Development"
+    },
+    {
+      name: "Railsplit",
+      description: "An intelligent transit engine designed to solve the Indian Railways waitlist dilemma. By parsing journey maps, identifying efficient intermediate junctions, and analyzing availability datasets, it helps travelers find confirmed tickets via split-booking legs.",
+      tags: ["ReactJS", "FastAPI", "Docker", "Redis", "SSE", "Playwright"],
+      liveUrl: "https://railsplit.luckylinux.dev",
+      githubUrl: "https://github.com/KALI-THE-HACKER/Railsplit",
+      outcome: "Designed a custom search-space pruning algorithm using ellipse-constrained station selection for fast split-route optimization.",
+      imageUrl: "/railsplit-mockup.png",
+      images: ["/railsplit-mockup.png", "/railsplit-backend-logic-chart.png"]
+    },
+    {
+      name: "ChronoCare",
+      description: "A health management platform featuring a clickable 3D human body mapper mapping medical history and timeline. It integrates an Agentic RAG chat assistant to resolve patient queries securely based on localized medical records.",
+      tags: ["ReactJS", "TailwindCSS", "FastAPI", "ChromaDB", "MySQL", "Agentic AI"],
+      githubUrl: "https://github.com/KALI-THE-HACKER/chronocare",
+      outcome: "Built an interactive 3D human body mapper synced with relational schemas, integrated with a vector database RAG search pipeline.",
+      imageUrl: "/chronocare-mockup.webm"
+    },
+    {
+      name: "SysSight",
+      description: "A robust, real-time system monitoring platform designed to track and visualize system metrics across multiple hosts. It aggregates performance diagnostics (CPU, Memory, Disk, Network) via lightweight Python agents, streams telemetry via WebSockets, and manages Redis-cached process details with threshold-based email alerts.",
+      tags: ["React", "FastAPI", "WebSockets", "Redis", "MySQL", "psutil"],
+      githubUrl: "https://github.com/KALI-THE-HACKER/SysSight",
+      outcome: "Built a real-time multi-host system monitoring platform with live metrics, process tracking, and WebSocket-based dashboards.",
+      imageUrl: "https://drive.google.com/file/d/1ov2ELtmHcK2qYQLUp7gR4b1L-HhqLdUv/preview"
+    },
+    {
+      name: "Server Dashboard",
+      description: "A custom hosting controller built for single-host environment orchestration. Provides real-time CPU/RAM telemetry, active service controls, and authenticated terminal shells exposed securely through custom WebSocket tunnels.",
+      tags: ["WebSockets", "FastAPI", "Psutil", "React", "JWT", "Systems"],
+      githubUrl: "https://github.com/KALI-THE-HACKER/server-dashboard",
+      outcome: "Eliminated public SSH exposures by establishing a token-authenticated web based terminal connection directly integrated with Host Process isolation. So that I can control my server from anywhere any device.",
+      imageUrl: "/dashboard-mockup.png"
+    }
+  ]
+
+  const otherProjects = [
+    {
+      name: "Network.K",
+      type: "Mobile Application",
+      description: "A campus social networking app designed for NITK students. It helps users connect with peers, share resources, collaborate on projects, and stay updated with college events.",
+      tags: ["Flutter", "SQLite", "REST API", "Provider"],
+      link: "https://github.com/KALI-THE-HACKER/NetworkK"
+    },
+    {
+      name: "CTFd Docker Challenges",
+      type: "Open Source Contribution",
+      description: "Contributed to an open-source CTFd Docker challenges plugin, improving container-based challenge deployment.",
+      tags: ["Docker", "CTFd", "Security", "Python"],
+      link: "https://github.com/KALI-THE-HACKER/CTFd-docker-plugin"
+    },
+    {
+      name: "Alarmmate",
+      type: "Mobile Application",
+      description: "A lightweight, robust Android alarm scheduler built with Flutter. Provides multiple alarm presets, highly accurate scheduling algorithms, and reliable wake-up alerts.",
+      tags: ["Flutter", "Hive DB", "Provider", "Dart SDK"],
+      link: "https://github.com/KALI-THE-HACKER/Alarmmate"
+    },
+    {
+      name: "Ultimate Alarm Clock",
+      type: "Open Source Contribution",
+      description: "Contributed a randomized ringtone selection feature to the Ultimate Alarm Clock project under the CCExtractor open-source organization.",
+      tags: ["Flutter", "Git", "Open Source", "CCExtractor"],
+      link: "https://github.com/CCExtractor/ultimate_alarm_clock/pull/642"
+    },
+    {
+      name: "XpenseX",
+      type: "Web Application",
+      description: "A personal finance dashboard mapping transaction histories, budgets, and savings goals. Built with Docker orchestration, Nginx gateways, and Azure Cloud hosting.",
+      tags: ["CI/CD", "Nginx", "Azure", "Docker", "FastAPI", "React"],
+      link: "https://github.com/KALI-THE-HACKER/xpensex"
+    }
+  ]
+
+  const timelineItems = [
+    {
+      organization: "National Institute of Technology Karnataka, Surathkal",
+      role: "B.Tech in Computational & Data Science",
+      duration: "August 2024 — April 2028",
+      description: "Focusing on Computational Mathematics, Data Structures, Algorithms, Machine Learning, and Systems Engineering.",
+      achievements: [
+        "Studying core theoretical and practical computer science, advanced algebra, database management, and network models.",
+        "Applying academic systems theory to hands-on lab environments and container orchestration platforms."
+      ]
+    },
+    {
+      organization: "Katha AI",
+      role: "Developer",
+      duration: "June 2025 — Present",
+      description: <>Industry Project under <Link href="https://cse.nitk.ac.in/faculty/mohit-p-tahiliani" target="_blank" className="inline-flex items-center gap-1 hover:text-[#B36A2E] underline transition-colors">Prof. Mohit P. Tahiliani<ExternalLink className="w-3.5 h-3.5 text-[#B36A2E] shrink-0" /></Link>, CSE Department, NITK</>,
+      achievements: [
+        <>Developed core frontend and backend modules for an AI-powered storytelling platform using <span className="font-medium text-[#2E2C2A]">React</span>, <span className="font-medium text-[#2E2C2A]">Django REST Framework</span>, and <span className="font-medium text-[#2E2C2A]">PostgreSQL</span>.</>,
+        <>Integrated <span className="font-medium text-[#2E2C2A]">Cloudflare R2</span> for scalable media delivery and developed REST APIs for books, scenes, metadata, and AI-generated multimedia assets.</>
+      ]
+    },
+    {
+      organization: "Web Enthusiasts’ Club, NITK",
+      role: "Systems SIG Secretary",
+      duration: "Sep 2025 — Present",
+      description: "Managing campus systems infrastructure, orchestrating CTF competitions, and leading SIG workflows.",
+      achievements: [
+        <>Promoted from <span className="font-medium text-[#2E2C2A]">Systems SIG Executive</span> (Sep 2025–Mar 2026) to <span className="font-medium text-[#2E2C2A]">Systems SIG Secretary</span> (Apr 2026–Present).</>,
+        <>Designed and managed the infrastructure for <span className="font-medium text-[#2E2C2A]">WECCTF</span>, serving <span className="font-medium text-[#2E2C2A]">400+ participants</span> using <span className="font-medium text-[#2E2C2A]">CTFd</span> with support for static and <span className="font-medium text-[#2E2C2A]">10+ Docker-based</span> challenges.</>,
+        <>Architected a <span className="font-medium text-[#2E2C2A]">hybrid deployment</span> by combining institutional servers with a <span className="font-medium text-[#2E2C2A]">remote Azure Docker Engine</span>, enabling scalable containerized challenge hosting.</>,
+        <>Built the <span className="font-medium text-[#2E2C2A]">WECCTF Archive</span> with challenge write-ups and solutions.</>,
+        <>Contributed to the open-source <span className="font-medium text-[#2E2C2A]">CTFd Docker Challenges Plugin</span>.</>
+      ]
+    },
+    {
+      organization: "180 Degrees Consulting, NITK",
+      role: "Developer",
+      duration: "Sep 2025 — Present",
+      description: "Building and deploying full-stack web applications for real-world clients.",
+      achievements: [
+        <>Built and deployed <span className="font-medium text-[#2E2C2A]">full-stack web applications</span> for real-world clients using modern web technologies.</>,
+        <>Developed backend APIs, managed databases, and automated deployments using <span className="font-medium text-[#2E2C2A]">Docker</span> and DevOps workflows.</>,
+        <>Collaborated with cross-functional teams to deliver scalable, production-ready software solutions.</>
+      ]
+    }
+  ]
+
+  const expertise = [
+    {
+      category: "Programming Languages",
+      items: [
+        "Python",
+        "C++",
+        "Rust",
+        "TypeScript",
+        "JavaScript",
+        "SQL"
+      ]
+    },
+    {
+      category: "Systems & DevOps",
+      items: [
+        "Docker",
+        "GitHub Actions",
+        "CI/CD",
+        "Jenkins, Gitea",
+        "Azure, AWS",
+        "Cloudflare",
+        "Nginx",
+        "System Design",
+      ]
+    },
+    {
+      category: "Backend",
+      items: [
+        "FastAPI",
+        "Django",
+        "SQLAlchemy",
+        "REST APIs",
+        "Redis",
+        "webSockets",
+        "WebRTC",
+        "Server-Sent Events"
+      ]
+    },
+    {
+      category: "AI",
+      items: [
+        "LangGraph",
+        "LangChain",
+        "RAG",
+        "AI Agents",
+        "Gemini API"
+      ]
+    },
+    {
+      category: "Databases",
+      items: [
+        "PostgreSQL",
+        "MySQL",
+        "Supabase",
+        "SQLite"
+      ]
+    },
+    {
+      category: "Frontend",
+      items: [
+        "React",
+        "Vite",
+        "Tailwind CSS",
+        "Flutter",
+        "Firebase"
+      ]
+    },
+    {
+      category: "Developer Tools",
+      items: [
+        "Git",
+        "GitLab",
+        "Playwright",
+        "Postman",
+      ]
+    },
+    {
+      category: "Hacking Tools",
+      tagline: "which I tried learning when I was 16yo 😅",
+      items: [
+        "Burp Suite",
+        "Metasploit",
+        "Aircrack-ng",
+        "John the Ripper",
+        "Ghidra",
+        "Hydra",
+        "Wireshark",
+        "Ettercap",
+        "SQLmap",
+        "Nmap",
+        "and a lot more..."
+      ]
+    }
+  ];
+
+  const services = [
+    {
+      title: "NextCloud - Encrypted Cloud Storage",
+      description: "A private instance of Nextcloud offering full file syncing, calendar management, and Google Drive-like web interfaces. Powered by local databases and encrypted volume mounts.",
+      link: "/services/cloud-storage",
+      officialName: "nextcloud.com",
+      officialUrl: "https://nextcloud.com"
+    },
+    {
+      title: "n8n - Workflow Automation",
+      description: "Dedicated member account on our shared visual workflow automation tool. Link more than 350 third-party APIs, run background cron jobs, and map webhooks effortlessly.",
+      link: "/services/n8n",
+      officialName: "n8n.io",
+      officialUrl: "https://n8n.io"
+    },
+    {
+      title: "Plausible - Web Analytics",
+      description: "Privacy-first, cookie-free audience tracking powered by Plausible Analytics. Gather user visit patterns, geographical demographics, and browser metadata with zero tracking banners.",
+      link: "/services/analytics",
+      officialName: "plausible.io",
+      officialUrl: "https://plausible.io"
+    },
+    {
+      title: "VSCode Server",
+      description: "A private, zero-dependency VS Code workspace containerized and hosted on dedicated server hardware. Access your code editor from any remote browser with persistent sandboxed terminal sessions.",
+      link: "/services/code-server",
+      officialName: "github.com/coder/code-server",
+      officialUrl: "https://github.com/coder/code-server"
+    }
+  ]
+
+  const [cloud_infra_image_light, setCloud_infra_image_light] = useState(false);
+  const [activeTab, setActiveTab] = useState("overview");
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-zinc-950 via-zinc-900 to-zinc-950 text-zinc-100">
-      {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center px-4 py-20 overflow-hidden">
-        {/* Background effects */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse" />
-          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse [animation-delay:2s]" />
-        </div>
+    <div className="min-h-screen bg-[#F9F7F3] text-[#1C1C1C] flex flex-col font-sans selection:bg-[#B36A2E]/10 selection:text-[#B36A2E] theme-transition">
+      <Navbar />
 
-        <div className="relative z-10 max-w-5xl mx-auto text-center space-y-8">
-          <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-balance">
-            Luckylinux&apos;s Self-Hosted Universe
-          </h1>
-          <p className="text-2xl md:text-3xl text-zinc-400 font-light text-balance">
-            Things I build. Things I host. Things I run.
-          </p>
-          <p className="text-base md:text-lg text-zinc-500 max-w-2xl mx-auto leading-relaxed text-balance">
-            A showcase of self-hosted applications, automation workflows, and cloud services—designed for privacy, control, and continuous learning
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-            <Button
-              size="lg"
-              className="bg-zinc-100 text-zinc-900 hover:bg-white transition-all duration-300 shadow-lg hover:shadow-zinc-100/20"
-              asChild
-            >
-              <Link href="#systems">
-                Explore Systems
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="border-zinc-700 bg-zinc-900/50 text-zinc-100 hover:bg-zinc-800 hover:border-zinc-500 backdrop-blur-sm transition-all duration-300"
-              asChild
-            >
-              <Link target="_blank" href="https://portfolio.luckylinux.dev">View Portfolio</Link>
-            </Button>
-          </div>
-        </div>
-      </section>
+      <main className="flex-1">
+        {/* Cinematic Hero */}
+        <Hero />
 
-      {/* Development Tools Section */}
-      <section id="systems" className="relative px-4 py-24">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-5xl font-bold mb-4 bg-gradient-to-br from-zinc-100 to-zinc-400 bg-clip-text text-transparent">Development Tools</h2>
-            <p className="text-zinc-500 text-lg max-w-2xl mx-auto">Powerful development and server management tools hosted on dedicated infrastructure</p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Code Server */}
-            <Link href="https://code.luckylinux.dev" target="_blank" rel="noopener noreferrer">
-              <div className="group relative h-full bg-gradient-to-br from-zinc-900/90 to-zinc-900/50 backdrop-blur-xl border border-zinc-800 rounded-2xl p-8 hover:border-cyan-500/50 transition-all duration-500 hover:shadow-2xl hover:shadow-cyan-500/10 cursor-pointer flex flex-col">
-                <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
-                <div className="relative z-10 space-y-4 flex-1 flex flex-col">
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <h3 className="text-2xl font-semibold text-zinc-100 mb-1">Code Server</h3>
-                      <span className="text-xs text-zinc-500 font-medium uppercase tracking-wider">Private Access</span>
-                    </div>
-                    <div className="w-12 h-12 rounded-xl bg-cyan-500/10 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                      <Code2 className="w-6 h-6 text-cyan-400" />
-                    </div>
-                  </div>
-                  <p className="text-zinc-400 leading-relaxed flex-1">Web-based VS Code instance for coding from anywhere—laptop, tablet, or smartphone—with full IDE features and secure remote access</p>
-                  <div className="pt-2 flex items-center text-cyan-400 text-sm font-medium">
-                    <span className="group-hover:translate-x-1 transition-transform">Access IDE</span>
-                    <ArrowRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                  </div>
+        {/* About Section */}
+        <Section id="about">
+          <Container>
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+              {/* Left: Tagline, Overview, Buttons */}
+              <div className="lg:col-span-7 space-y-8 animate-fade-in">
+                <div className="space-y-3">
+                  <span className="text-[12px] uppercase font-mono tracking-widest text-[#B36A2E] font-semibold">
+                    Overview
+                  </span>
+                  <h2 className="text-4xl md:text-5xl text-[#1C1C1C] font-normal font-serif leading-tight">
+                    Building software, infrastructure, and everything in between.
+                  </h2>
                 </div>
-              </div>
-            </Link>
 
-            {/* Server Dashboard */}
-            <Link href="https://github.com/KALI-THE-HACKER/server-dashboard" target="_blank" rel="noopener noreferrer">
-              <div className="group relative h-full bg-gradient-to-br from-zinc-900/90 to-zinc-900/50 backdrop-blur-xl border border-zinc-800 rounded-2xl p-8 hover:border-purple-500/50 transition-all duration-500 hover:shadow-2xl hover:shadow-purple-500/10 cursor-pointer flex flex-col">
-                <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
-                <div className="relative z-10 space-y-4 flex-1 flex flex-col">
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <h3 className="text-2xl font-semibold text-zinc-100 mb-1">Server Dashboard</h3>
-                      <span className="text-xs text-zinc-500 font-medium uppercase tracking-wider">Private Access</span>
-                    </div>
-                    <div className="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                      <Lock className="w-6 h-6 text-purple-400" />
-                    </div>
-                  </div>
-                  <p className="text-zinc-400 leading-relaxed flex-1">Comprehensive control panel for managing services, monitoring system health, and accessing server terminal securely via browser interface on any device</p>
-                  <div className="pt-2 flex items-center text-purple-400 text-sm font-medium">
-                    <span className="group-hover:translate-x-1 transition-transform">View on GitHub</span>
-                    <ArrowRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                  </div>
+                <div className="text-[16px] md:text-[17px] text-[#66635F] font-light leading-relaxed space-y-6">
+                  <p>
+                    I'm a Data Science student at NITK Surathkal with a strong interest in backend engineering, distributed systems, and cloud infrastructure. I build AI-powered applications, developer tools, and scalable backend services while exploring the technologies that power them.
+                  </p>
+                  <p>
+                    Alongside my projects, I maintain a self-hosted infrastructure where I experiment with Linux, Docker, networking, reverse proxies, databases, and automation. This website documents my work, technical explorations, open-source contributions, and the systems I continue to build and improve.
+                  </p>
                 </div>
-              </div>
-            </Link>
-          </div>
-        </div>
-      </section>
 
-      {/* Applications Section */}
-      <section className="relative px-4 py-24 bg-zinc-900/20">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-5xl font-bold mb-4 bg-gradient-to-br from-zinc-100 to-zinc-400 bg-clip-text text-transparent">Applications</h2>
-            <p className="text-zinc-500 text-lg max-w-2xl mx-auto">Production-ready applications and services built from scratch</p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Railsplit Card */}
-            <div className="group relative h-full bg-gradient-to-br from-zinc-900/90 to-zinc-900/50 backdrop-blur-xl border border-zinc-800 rounded-2xl p-8 hover:border-blue-500/50 transition-all duration-500 hover:shadow-2xl hover:shadow-blue-500/10 flex flex-col">
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
-              <div className="relative z-10 space-y-4 flex-1 flex flex-col">
-                <div className="flex items-start justify-between">
-                  <h3 className="text-2xl font-semibold text-zinc-100">Railsplit</h3>
-                  <div className="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                    <div className="w-6 h-6 rounded bg-gradient-to-br from-blue-400 to-cyan-500" />
-                  </div>
-                </div>
-                <p className="text-zinc-400 leading-relaxed flex-1">
-                  Helps you find confirmed train seats by intelligently splitting long journeys, finding efficient intermediate junctions, and suggesting routes with confirmed availability.
-                </p>
-                <div className="pt-2 flex flex-col gap-2">
-                  <Link href="https://railsplit.luckylinux.dev" target="_blank" rel="noopener noreferrer" className="flex items-center text-blue-400 text-sm font-medium hover:text-blue-300 transition-colors w-fit">
-                    <span className="hover:translate-x-1 transition-transform">Launch App</span>
-                    <ArrowRight className="ml-1 h-4 w-4 hover:translate-x-1 transition-transform" />
+                <div className="flex flex-wrap items-center gap-6 pt-4">
+                  <Link
+                    href="#projects"
+                    className="inline-flex items-center justify-center px-6 py-3 bg-[#1C1C1C] text-[#F9F7F3] rounded-md hover:bg-[#2c2c2c] transition-all hover:scale-[1.02] active:scale-[0.98] duration-200 shadow-xs text-[15px] font-medium"
+                  >
+                    View selected work
                   </Link>
-                  <Link href="https://www.linkedin.com/posts/luckylinux_%F0%9D%90%88%F0%9D%90%A7%F0%9D%90%AD%F0%9D%90%AB%F0%9D%90%A8%F0%9D%90%9D%F0%9D%90%AE%F0%9D%90%9C%F0%9D%90%A2%F0%9D%90%A7%F0%9D%90%A0-%F0%9D%90%91%F0%9D%90%9A%F0%9D%90%A2%F0%9D%90%A5%F0%9D%90%AC%F0%9D%90%A9%F0%9D%90%A5%F0%9D%90%A2%F0%9D%90%AD-activity-7349056500750766080-joUz?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFGAqHoBlpF_nvgErJECw87HfWSk_ioQXaA" target="_blank" rel="noopener noreferrer" className="flex items-center text-blue-400 text-sm font-medium hover:text-blue-300 transition-colors w-fit">
-                    <span className="hover:translate-x-1 transition-transform">View on LinkedIn</span>
-                    <ArrowRight className="ml-1 h-4 w-4 hover:translate-x-1 transition-transform" />
+                  <Link
+                    href="#infrastructure"
+                    className="inline-flex items-center gap-1.5 text-[15px] font-medium text-[#1C1C1C] hover:text-[#B36A2E] transition-colors group"
+                  >
+                    Explore systems
+                    <span className="group-hover:translate-x-1 transition-transform duration-200 font-mono">→</span>
                   </Link>
                 </div>
               </div>
+
+              {/* Right: Profile Image */}
+              <div className="lg:col-span-5 flex justify-center animate-fade-in">
+                <div className="relative w-full max-w-[340px] aspect-square rounded-md overflow-hidden border border-[rgba(0,0,0,0.08)] bg-[#F6F3ED] shadow-xs">
+                  <img
+                    src="/profile_img.png"
+                    alt="Luckylinux's Profile"
+                    className="w-full h-full object-cover select-none"
+                  />
+                </div>
+              </div>
+            </div>
+          </Container>
+        </Section>
+
+        {/* Experience Timeline Section */}
+        <Section id="experience">
+          <Container>
+            <SectionHeading
+              title="Experience & Education"
+              subtitle="The experiences that shaped my skills and perspective."
+            />
+            <Timeline items={timelineItems} />
+          </Container>
+        </Section>
+
+        {/* Selected Work */}
+        <Section id="projects" background="dark" className="py-32 md:py-48 border-t border-b">
+          <Container>
+            <SectionHeading
+              title="Selected Work"
+              subtitle="A collection of projects built to solve real problems through thoughtful engineering."
+            />
+            <div className="space-y-12">
+              {projects.map((project, index) => (
+                <ProjectCard
+                  key={project.name}
+                  name={project.name}
+                  description={project.description}
+                  tags={project.tags}
+                  liveUrl={project.liveUrl}
+                  githubUrl={project.githubUrl}
+                  outcome={project.outcome}
+                  imageUrl={project.imageUrl}
+                  index={index}
+                  status={project.status}
+                  images={project.images}
+                />
+              ))}
             </div>
 
-            {/* Portfolio Card */}
-            <Link href="https://portfolio.luckylinux.dev" target="_blank" rel="noopener noreferrer">
-              <div className="group relative h-full bg-gradient-to-br from-zinc-900/90 to-zinc-900/50 backdrop-blur-xl border border-zinc-800 rounded-2xl p-8 hover:border-emerald-500/50 transition-all duration-500 hover:shadow-2xl hover:shadow-emerald-500/10 cursor-pointer flex flex-col">
-                <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
-                <div className="relative z-10 space-y-4 flex-1 flex flex-col">
-                  <div className="flex items-start justify-between">
-                    <h3 className="text-2xl font-semibold text-zinc-100">Portfolio</h3>
-                    <div className="w-12 h-12 rounded-xl bg-emerald-500/10 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                      <FileText className="w-6 h-6 text-emerald-400" />
+            {/* Grid for additional projects */}
+            <div className="mt-24 pt-16 border-t border-[rgba(255,255,255,0.08)]">
+              <SectionHeading
+                title="Additional Projects & Contributions"
+                subtitle="Other software applications, mobile utility projects, and contributions to open source repositories."
+                className="mb-12 animate-fade-in"
+              />
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {otherProjects.map((proj, idx) => (
+                  <AnimatedText
+                    key={proj.name}
+                    delay={0.1 * idx}
+                    y={10}
+                    className="flex flex-col justify-between p-6 bg-[#151515] border border-[rgba(255,255,255,0.06)] rounded-xs space-y-4 hover:border-[rgba(255,255,255,0.12)] transition-all duration-200"
+                  >
+                    <div className="space-y-3">
+                      <span className="text-[10px] uppercase font-mono tracking-widest text-[#B36A2E] block font-medium">
+                        {proj.type}
+                      </span>
+                      <h4 className="text-xl text-[#F7F5F1] font-serif font-normal">
+                        {proj.name}
+                      </h4>
+                      <p className="text-[14px] text-[rgba(255,255,255,0.68)] leading-relaxed font-light">
+                        {proj.description}
+                      </p>
                     </div>
+
+                    <div className="space-y-3 pt-3 border-t border-[rgba(255,255,255,0.06)] flex flex-col justify-end">
+                      <div className="flex flex-wrap gap-1.5 mb-2">
+                        {proj.tags.map(t => (
+                          <span key={t} className="px-1.5 py-0.5 text-[10px] font-mono text-[rgba(255,255,255,0.68)] bg-[#151515] rounded-xs border border-[rgba(255,255,255,0.04)]">
+                            {t}
+                          </span>
+                        ))}
+                      </div>
+
+                      {proj.link && (
+                        <Link
+                          href={proj.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 text-[12px] font-mono text-[#F7F5F1] hover:text-[#B36A2E] transition-colors border-b border-[#F7F5F1] hover:border-[#B36A2E] pb-0.5 w-fit"
+                        >
+                          View Repository
+                          <ArrowRight className="w-3 h-3" />
+                        </Link>
+                      )}
+                    </div>
+                  </AnimatedText>
+                ))}
+              </div>
+            </div>
+          </Container>
+        </Section>
+
+        {/* Rentable Services Section */}
+        <Section id="infrastructure">
+          <Container>
+            <SectionHeading
+              title="Self-Hosted Infrastructure"
+              subtitle="Encrypted, cookie-free cloud tools configured and managed for privacy-conscious developers."
+            />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-16">
+              {services.map((service, index) => (
+                <AnimatedText
+                  key={service.title}
+                  delay={0.1 * (index + 1)}
+                  y={12}
+                  className="space-y-4 flex flex-col justify-between"
+                >
+                  <div className="space-y-3">
+                    <h3 className="text-2xl text-[#1C1C1C] font-normal font-serif">
+                      {service.title}
+                    </h3>
+                    <p className="text-[15px] md:text-[16px] text-[#66635F] leading-relaxed font-light">
+                      {service.description}
+                    </p>
+                    {service.officialUrl && (
+                      <div className="flex items-center gap-1.5 text-[12px] font-mono text-[#66635F] pt-1">
+                        <ExternalLink className="w-3.5 h-3.5 text-[#B36A2E]/80" />
+                        <span>Official Project:</span>
+                        <a
+                          href={service.officialUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="underline hover:text-[#B36A2E] transition-colors font-medium"
+                        >
+                          {service.officialName}
+                        </a>
+                      </div>
+                    )}
                   </div>
-                  <p className="text-zinc-400 leading-relaxed flex-1">Complete showcase of my engineering projects, technical implementations, and development work</p>
-                  <div className="pt-2 flex items-center text-emerald-400 text-sm font-medium">
-                    <span className="group-hover:translate-x-1 transition-transform">View Portfolio</span>
-                    <ArrowRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  <div className="pt-2">
+                    <Link
+                      href={service.link}
+                      className="inline-flex items-center gap-1 text-[13px] font-mono text-[#1C1C1C] hover:text-[#B36A2E] transition-colors border-b border-[#1C1C1C] hover:border-[#B36A2E] pb-0.5"
+                    >
+                      Provision Service
+                      <ArrowRight className="w-3 h-3" />
+                    </Link>
+                  </div>
+                </AnimatedText>
+              ))}
+            </div>
+          </Container>
+        </Section>
+
+        {/* Achievements Section */}
+        <Section id="achievements" background="secondary">
+          <Container>
+            <SectionHeading
+              title="Achievements & Milestones"
+              subtitle="Understated engineering markers, open-source work, and community leadership."
+            />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 text-[15px] md:text-[16px] text-[#66635F] leading-relaxed font-light">
+              <AnimatedText delay={0.1} className="space-y-4 p-6 bg-[#F9F7F3] border border-[rgba(0,0,0,0.06)] rounded-sm relative">
+                <Link
+                  href="https://www.linkedin.com/in/luckylinux/details/honors/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="absolute top-4 right-4 text-[#B36A2E]/60 hover:text-[#B36A2E] transition-colors"
+                >
+                  <ExternalLink className="w-4 h-4" />
+                </Link>
+                <span className="font-mono text-[#B36A2E] text-[12px] tracking-wider uppercase block">
+                  Hackathons
+                </span>
+                <h4 className="text-xl text-[#1C1C1C] font-serif font-normal">
+                  Engineer&apos;s Day Hackathon
+                </h4>
+                <div className="flex items-start gap-2 text-[14px] md:text-[15px]">
+                  <span className="shrink-0 text-base">🥈</span>
+                  <span>
+                    Secured <span className="font-medium text-[#2E2C2A]">2nd Place</span> among <span className="font-medium text-[#2E2C2A]">40+ teams</span> at the Engineer&apos;s Day <span className="font-medium text-[#2E2C2A]">Hackathon</span> with an <span className="font-medium text-[#2E2C2A]">AI-powered healthcare platform</span>.
+                  </span>
+                </div>
+              </AnimatedText>
+
+              <AnimatedText delay={0.2} className="space-y-4 p-6 bg-[#F9F7F3] border border-[rgba(0,0,0,0.06)] rounded-sm relative">
+                <Link
+                  href="https://www.linkedin.com/in/luckylinux/details/honors/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="absolute top-4 right-4 text-[#B36A2E]/60 hover:text-[#B36A2E] transition-colors"
+                >
+                  <ExternalLink className="w-4 h-4" />
+                </Link>
+                <span className="font-mono text-[#B36A2E] text-[12px] tracking-wider uppercase block">
+                  Cybersecurity Events
+                </span>
+                <h4 className="text-xl text-[#1C1C1C] font-serif font-normal">
+                  Capture The Flag (CTF) Competitions
+                </h4>
+                <div className="space-y-2 text-[14px] md:text-[15px]">
+                  <div className="flex items-start gap-2">
+                    <span className="shrink-0 text-base">🏆</span>
+                    <span>
+                      <strong className="font-medium text-[#2E2C2A]">1st Place</strong> – Sherlocked CTF (IET NITK), 250+ participants
+                    </span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <span className="shrink-0 text-base">🥉</span>
+                    <span>
+                      <strong className="font-medium text-[#2E2C2A]">3rd Place</strong> – Incub8 CTF (E-Cell NITK), 450+ participants
+                    </span>
                   </div>
                 </div>
-              </div>
-            </Link>
-          </div>
-        </div>
-      </section>
+              </AnimatedText>
+            </div>
+          </Container>
+        </Section>
 
-      {/* Services Section */}
-      <section className="relative px-4 py-24">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-5xl font-bold mb-4 bg-gradient-to-br from-zinc-100 to-zinc-400 bg-clip-text text-transparent">Services for Rent</h2>
-            <p className="text-zinc-500 text-lg max-w-2xl mx-auto">Professional cloud services and automation tools available for your projects</p>
-          </div>
+        {/* Technical Expertise Section */}
+        <Section id="expertise">
+          <Container>
+            <SectionHeading
+              title="Technical Expertise"
+              subtitle="Tools and technologies behind the products I engineer."
+            />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
+              {expertise.map((group, index) => (
+                <AnimatedText
+                  key={group.category}
+                  delay={0.1 * index}
+                  y={10}
+                  className="space-y-4"
+                >
+                  <h3 className="font-serif text-2xl text-[#1C1C1C] border-b border-[rgba(0,0,0,0.08)] pb-2 font-normal">
+                    {group.category}
+                    {group.tagline && (
+                      <span className="block text-[12px] font-sans font-light text-[#66635F] italic mt-1 leading-normal font-normal">
+                        {group.tagline}
+                      </span>
+                    )}
+                  </h3>
+                  <ul className="space-y-2">
+                    {group.items.map((item) => (
+                      <li key={item} className="text-[14px] font-mono text-[#66635F] flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#B36A2E]" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </AnimatedText>
+              ))}
+            </div>
+          </Container>
+        </Section>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-            {/* Cloud Storage Card */}
-            <Link href="/services/cloud-storage">
-              <div className="group relative h-full bg-gradient-to-br from-zinc-900/90 to-zinc-900/50 backdrop-blur-xl border border-zinc-800 rounded-2xl p-8 hover:border-indigo-500/50 transition-all duration-500 hover:shadow-2xl hover:shadow-indigo-500/10 cursor-pointer flex flex-col">
-                <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
-                <div className="relative z-10 space-y-4 flex-1 flex flex-col">
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <h3 className="text-2xl font-semibold text-zinc-100 mb-1">Cloud Storage</h3>
-                      <span className="text-xs text-emerald-400 font-semibold uppercase tracking-wider">As cheap as just Rs. 29/month</span>
-                    </div>
-                    <div className="w-12 h-12 rounded-xl bg-indigo-500/10 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                      <Cloud className="w-6 h-6 text-indigo-400" />
-                    </div>
-                  </div>
-                  <p className="text-zinc-400 leading-relaxed flex-1">Secure, encrypted cloud storage with Google Drive-like features. Get your own private storage space with full privacy and control. Perfect for personal use.</p>
-                  <div className="pt-2 flex items-center text-indigo-400 text-sm font-medium">
-                    <span className="group-hover:translate-x-1 transition-transform">Get Storage</span>
-                    <ArrowRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                  </div>
-                </div>
-              </div>
-            </Link>
+        {/* Systems Lab */}
+        <Section id="infrastructure" background="dark" className="font-mono text-[14px] py-32 md:py-48">
+          <Container>
+            <SectionHeading
+              title="Systems Lab"
+              subtitle="Detailed architectural documentation and configuration mappings of my self-hosted server environment."
+            />
 
-            {/* n8n */}
-            <Link href="/services/n8n">
-              <div className="group relative h-full bg-gradient-to-br from-zinc-900/90 to-zinc-900/50 backdrop-blur-xl border border-zinc-800 rounded-2xl p-8 hover:border-rose-500/50 transition-all duration-500 hover:shadow-2xl hover:shadow-rose-500/10 cursor-pointer flex flex-col">
-                <div className="absolute inset-0 bg-gradient-to-br from-rose-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
-                <div className="relative z-10 space-y-4 flex-1 flex flex-col">
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <h3 className="text-2xl font-semibold text-zinc-100 mb-1">n8n Workflows</h3>
-                      <span className="text-xs text-emerald-400 font-semibold uppercase tracking-wider">at just Rs. 49/month</span>
-                    </div>
-                    <div className="w-12 h-12 rounded-xl bg-rose-500/10 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                      <Workflow className="w-6 h-6 text-rose-400" />
-                    </div>
-                  </div>
-                  <p className="text-zinc-400 leading-relaxed flex-1">Rent your own n8n member account for powerful workflow automation. Integrate 350+ services, automate tasks, and build custom workflows with an intuitive visual editor.</p>
-                  <div className="pt-2 flex items-center text-rose-400 text-sm font-medium">
-                    <span className="group-hover:translate-x-1 transition-transform">Get Account</span>
-                    <ArrowRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                  </div>
-                </div>
-              </div>
-            </Link>
-
-            {/* Analytics */}
-            <Link href="/services/analytics">
-              <div className="group relative h-full bg-gradient-to-br from-zinc-900/90 to-zinc-900/50 backdrop-blur-xl border border-zinc-800 rounded-2xl p-8 hover:border-orange-500/50 transition-all duration-500 hover:shadow-2xl hover:shadow-orange-500/10 cursor-pointer flex flex-col">
-                <div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
-                <div className="relative z-10 space-y-4 flex-1 flex flex-col">
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <h3 className="text-2xl font-semibold text-zinc-100 mb-1">Web Analytics</h3>
-                      <span className="text-xs text-cyan-400 font-semibold uppercase tracking-wider">Free Service</span>
-                    </div>
-                    <div className="w-12 h-12 rounded-xl bg-orange-500/10 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                      <BarChart3 className="w-6 h-6 text-orange-400" />
-                    </div>
-                  </div>
-                  <p className="text-zinc-400 leading-relaxed flex-1">Free privacy-focused analytics for your website. Track visitor metrics, <strong>device types</strong> and <strong>location data</strong>—all without cookies. Perfect alternative to Google Analytics.</p>
-                  <div className="pt-2 flex items-center text-orange-400 text-sm font-medium">
-                    <span className="group-hover:translate-x-1 transition-transform">Start Tracking</span>
-                    <ArrowRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                  </div>
-                </div>
-              </div>
-            </Link>
-
-            {/* Mail Auth Service */}
-            <Link href="/services/email-auth">
-              <div className="group relative h-full bg-gradient-to-br from-zinc-900/90 to-zinc-900/50 backdrop-blur-xl border border-zinc-800 rounded-2xl p-8 hover:border-teal-500/50 transition-all duration-500 hover:shadow-2xl hover:shadow-teal-500/10 cursor-pointer flex flex-col">
-                <div className="absolute inset-0 bg-gradient-to-br from-teal-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
-                <div className="relative z-10 space-y-4 flex-1 flex flex-col">
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <h3 className="text-2xl font-semibold text-zinc-100 mb-1">Email Authentication</h3>
-                      <span className="text-xs text-cyan-400 font-semibold uppercase tracking-wider">Free Service</span>
-                    </div>
-                    <div className="w-12 h-12 rounded-xl bg-teal-500/10 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                      <Mail className="w-6 h-6 text-teal-400" />
-                    </div>
-                  </div>
-                  <p className="text-zinc-400 leading-relaxed flex-1">Free passwordless authentication for your website. Implement magic link email login in minutes. Secure, modern, and eliminates password management hassles for your users.</p>
-                  <div className="pt-2 flex items-center text-teal-400 text-sm font-medium">
-                    <span className="group-hover:translate-x-1 transition-transform">Integrate Now</span>
-                    <ArrowRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                  </div>
-                </div>
-              </div>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Server Infrastructure Documentation */}
-      <><section className="relative px-4 py-24">
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-5xl font-bold mb-4 bg-gradient-to-br from-zinc-100 to-zinc-400 bg-clip-text text-transparent">Server Infrastructure</h2>
-              <p className="text-zinc-500 text-lg">Technical documentation of the self-hosted setup</p>
+            {/* Tab navigation */}
+            <div className="flex flex-wrap gap-2 md:gap-4 border-b border-[rgba(255,255,255,0.08)] pb-4 mb-10">
+              {[
+                { id: "overview", name: "Overview" },
+                { id: "routing", name: "Routing & Configs" },
+                { id: "security", name: "Security & Services" },
+                { id: "why-self-host", name: "Why Self-Host?" },
+              ].map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`px-4 py-2 text-[12px] md:text-[13px] uppercase tracking-wider transition-all duration-200 border-b-2 font-mono cursor-pointer ${activeTab === tab.id
+                    ? "border-[#B36A2E] text-[#F7F5F1] font-bold"
+                    : "border-transparent text-[rgba(255,255,255,0.45)] hover:text-[#F7F5F1]"
+                    }`}
+                >
+                  {tab.name}
+                </button>
+              ))}
             </div>
 
-            <div className="space-y-12 text-zinc-300">
-              {/* Overview */}
-              <div className="space-y-4">
-                <h3 className="text-2xl font-semibold text-zinc-100">Overview</h3>
-                <div className="text-zinc-400 leading-relaxed space-y-3">
-                  <p>
-                    This is a local self-hosted server used for learning, experimentation, and running real production services. The infrastructure provides hands-on experience with system administration, networking, and DevOps practices while serving actual applications to users.
-                  </p>
-                  <p>
-                    Services are exposed securely to the internet using Cloudflare Tunnel without opening any inbound ports on the router or firewall. This eliminates the need for port forwarding and provides an additional layer of security through Cloudflare's edge network.
-                  </p>
+            {activeTab === "overview" && (
+              <div className="space-y-12 animate-fade-in w-full">
+                {/* Specs/Text in a horizontal 3-column grid */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-[rgba(255,255,255,0.68)] border-b border-[rgba(255,255,255,0.06)] pb-8">
+                  <div className="space-y-2">
+                    <span className="text-[11px] uppercase tracking-wider text-[#F7F5F1] block font-bold">
+                      Overview
+                    </span>
+                    <p className="leading-relaxed font-sans font-light text-[14px]">
+                      This is a local self-hosted server used for learning, experimentation, and running real production services. The infrastructure provides hands-on experience with system administration, networking, and DevOps practices while serving actual applications to users.
+                    </p>
+                  </div>
+                  <div className="space-y-2">
+                    <span className="text-[11px] uppercase tracking-wider text-[#F7F5F1] block font-bold">
+                      Networking & Ingress
+                    </span>
+                    <p className="leading-relaxed font-sans font-light text-[14px]">
+                      Services are exposed securely to the internet using Cloudflare Tunnel without opening any inbound ports on the router or firewall. This eliminates the need for port forwarding and provides an additional layer of security through Cloudflare's edge network.
+                    </p>
+                  </div>
+                  <div className="space-y-2">
+                    <span className="text-[11px] uppercase tracking-wider text-[#F7F5F1] block font-bold">
+                      Architecture Overview
+                    </span>
+                    <p className="leading-relaxed font-sans font-light text-[14px]">
+                      Cloudflare acts as the public-facing endpoint, routing requests through an encrypted tunnel to the local server. Nginx then handles internal routing to appropriate services based on hostname and path.
+                    </p>
+                  </div>
                 </div>
-              </div>
 
-              {/* Architecture Overview */}
-              <div className="space-y-4">
-                <h3 className="text-2xl font-semibold text-zinc-100">Architecture Overview</h3>
-                <div className="text-zinc-400 leading-relaxed space-y-3">
-                  <p>
-                    The request flow follows this path: <span className="text-cyan-400 font-mono text-sm">Users → Cloudflare Edge → Cloudflare Tunnel → Nginx Reverse Proxy → Internal Services</span>
-                  </p>
-                  <p>
-                    Cloudflare acts as the public-facing endpoint, routing requests through an encrypted tunnel to the local server. Nginx then handles internal routing to appropriate services based on hostname and path.
-                  </p>
-                  <div className="w-full">
+                {/* Architecture visualization image & caption (Full Width) */}
+                <div className="bg-[#151515] border border-[rgba(255,255,255,0.08)] rounded-md overflow-hidden flex flex-col w-full">
+                  <div className="flex items-center justify-between w-full px-6 py-4 border-b border-[rgba(255,255,255,0.08)]">
+                    <span className="text-[11px] uppercase tracking-wider text-[rgba(255,255,255,0.68)] font-mono">
+                      VISUAL SCHEMATIC OVERVIEW
+                    </span>
+                    <button
+                      onClick={() => setCloud_infra_image_light(!cloud_infra_image_light)}
+                      className="inline-flex items-center gap-1.5 px-3 py-1 text-[10px] font-mono uppercase tracking-[0.1em] border border-[rgba(255,255,255,0.15)] rounded-xs text-[rgba(255,255,255,0.68)] hover:text-[#F7F5F1] hover:border-[#8c5330] transition-all duration-200 cursor-pointer"
+                    >
+                      {cloud_infra_image_light ? (
+                        <>
+                          <Moon className="w-3.5 h-3.5" />
+                          Switch to Dark
+                        </>
+                      ) : (
+                        <>
+                          <Sun className="w-3.5 h-3.5" />
+                          Switch to Light
+                        </>
+                      )}
+                    </button>
+                  </div>
+                  <div className="flex flex-col items-center justify-center p-6 bg-transparent gap-4">
                     <img
-                      src="/cloud-infrastructure.png"
+                      src={cloud_infra_image_light ? "/cloud-infrastructure-light.png" : "/cloud-infrastructure.png"}
                       alt="Server Infrastructure Architecture Diagram"
-                      className="w-full h-auto" />
+                      className="w-full max-w-4xl h-auto select-none rounded-xs"
+                    />
+                    <div className="text-[12px] md:text-[13px] text-[rgba(255,255,255,0.5)] font-mono text-center border-t border-[rgba(255,255,255,0.06)] pt-4 w-full">
+                      The request flow follows this path:{" "}
+                      <span className="text-[#F7F5F1]">Users</span>{" "}
+                      <span className="text-white/30">→</span>{" "}
+                      <span className="text-amber-500">Cloudflare Edge</span>{" "}
+                      <span className="text-white/30">→</span>{" "}
+                      <span className="text-amber-500">Cloudflare Tunnel</span>{" "}
+                      <span className="text-white/30">→</span>{" "}
+                      <span className="text-[#B36A2E]">Nginx Reverse Proxy</span>{" "}
+                      <span className="text-white/30">→</span>{" "}
+                      <span className="text-emerald-500">Internal Services</span>
+                    </div>
                   </div>
                 </div>
               </div>
+            )}
 
-              {/* Networking & Exposure */}
-              <div className="space-y-4">
-                <h3 className="text-2xl font-semibold text-zinc-100">Networking & Exposure</h3>
-                <div className="text-zinc-400 leading-relaxed space-y-3">
-                  <p>
-                    Cloudflare Tunnel (cloudflared) is configured to map multiple subdomains to internal services. The tunnel daemon runs locally and maintains persistent connections to Cloudflare's edge network, eliminating the need for publicly exposed IP addresses or open inbound ports.
-                  </p>
-                  <p>
-                    Most hostnames terminate at <span className="text-cyan-400 font-mono text-sm">localhost:443</span>, where Nginx handles reverse proxying based on the Host header. Some services connect directly to their specific ports for performance or compatibility reasons.
-                  </p>
+            {activeTab === "routing" && (
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
+                {/* Description Text */}
+                <div className="lg:col-span-1 space-y-6 text-[rgba(255,255,255,0.68)]">
+                  <div className="space-y-2">
+                    <span className="text-[11px] uppercase tracking-wider text-[#F7F5F1] block font-bold">
+                      Networking & Exposure
+                    </span>
+                    <p className="leading-relaxed font-sans font-light text-[15px]">
+                      Cloudflare Tunnel (cloudflared) is configured to map multiple subdomains to internal services. The tunnel daemon runs locally and maintains persistent connections to Cloudflare's edge network, eliminating the need for publicly exposed IP addresses or open inbound ports.
+                    </p>
+                    <p className="leading-relaxed font-sans font-light text-[15px]">
+                      Most hostnames terminate at <span className="text-[#B36A2E] font-mono font-medium">localhost:443</span>, where Nginx handles reverse proxying based on the Host header. Some services connect directly to their specific ports for performance or compatibility reasons.
+                    </p>
+                  </div>
+                  <div className="space-y-2">
+                    <span className="text-[11px] uppercase tracking-wider text-[#F7F5F1] block font-bold">
+                      Nginx Reverse Proxy
+                    </span>
+                    <p className="leading-relaxed font-sans font-light text-[15px]">
+                      Nginx acts as the single entry point for HTTPS traffic from the Cloudflare Tunnel. It routes requests to internal services and applications based on the Host header, enabling multiple services to share the same external port (443).
+                    </p>
+                  </div>
                 </div>
-              </div>
 
-              {/* cloudflared Configuration */}
-              <div className="space-y-4">
-                <h3 className="text-2xl font-semibold text-zinc-100">cloudflared Configuration (Simplified)</h3>
-                <div className="text-zinc-400 leading-relaxed space-y-3">
-                  <p className="text-sm text-zinc-500 italic">
-                    Note: This configuration is a real-world but sanitized example showing how subdomains are mapped to internal services.
-                  </p>
-                  <div className="bg-zinc-950 border border-zinc-800 rounded-lg p-6 overflow-x-auto">
-                    <pre className="text-sm text-zinc-300 font-mono">
+                {/* Configurations Snippets */}
+                <div className="lg:col-span-2 space-y-6">
+                  {/* Cloud Tunnel yaml config snippet */}
+                  <div className="bg-[#151515] border border-[rgba(255,255,255,0.08)] rounded-md p-6 overflow-x-auto shadow-xs">
+                    <div className="flex items-center justify-between pb-3 border-b border-[rgba(255,255,255,0.06)] mb-4 text-[12px] text-[rgba(255,255,255,0.68)]">
+                      <span>config/cloudflared.yml</span>
+                      <span className="flex items-center gap-1.5"><ShieldCheck className="w-3.5 h-3.5 text-emerald-500" /> SECURE TUNNEL</span>
+                    </div>
+                    <pre className="text-[13px] text-[#F7F5F1] leading-relaxed">
                       {`ingress:
   - hostname: server.luckylinux.dev
     service: https://localhost:443
@@ -351,24 +755,14 @@ export default function Home() {
   - service: http_status:404`}
                     </pre>
                   </div>
-                  <p className="text-sm text-zinc-500">
-                    Internal routing to specific applications is handled by Nginx, not by cloudflared. The tunnel daemon simply forwards requests to the appropriate local port.
-                  </p>
-                </div>
-              </div>
 
-              {/* Nginx Reverse Proxy */}
-              <div className="space-y-4">
-                <h3 className="text-2xl font-semibold text-zinc-100">Nginx Reverse Proxy</h3>
-                <div className="text-zinc-400 leading-relaxed space-y-3">
-                  <p>
-                    Nginx acts as the single entry point for HTTPS traffic from the Cloudflare Tunnel. It routes requests to internal services and applications based on the Host header, enabling multiple services to share the same external port (443).
-                  </p>
-                  <p>
-                    Example server block structure:
-                  </p>
-                  <div className="bg-zinc-950 border border-zinc-800 rounded-lg p-6 overflow-x-auto">
-                    <pre className="text-sm text-zinc-300 font-mono">
+                  {/* Nginx config excerpt */}
+                  <div className="bg-[#151515] border border-[rgba(255,255,255,0.08)] rounded-md p-6 overflow-x-auto shadow-xs">
+                    <div className="flex items-center justify-between pb-3 border-b border-[rgba(255,255,255,0.06)] mb-4 text-[12px] text-[rgba(255,255,255,0.68)]">
+                      <span>nginx/conf.d/hardening.conf</span>
+                      <span className="flex items-center gap-1.5"><Terminal className="w-3.5 h-3.5 text-[#B36A2E]" /> NGINX ORIGIN</span>
+                    </div>
+                    <pre className="text-[13px] text-[#F7F5F1] leading-relaxed">
                       {`# Reverse proxy hardening (excerpt)
 server_tokens off;
 
@@ -380,181 +774,201 @@ limit_req_zone $binary_remote_addr zone=global:20m rate=10r/s;
 
 # TLS termination at Nginx (origin)
 ssl_protocols TLSv1.2 TLSv1.3;
-ssl_prefer_server_ciphers off;
-`}
+ssl_prefer_server_ciphers off;`}
                     </pre>
                   </div>
                 </div>
               </div>
+            )}
 
-              {/* TLS & Certificates */}
-              <div className="space-y-4">
-                <h3 className="text-2xl font-semibold text-zinc-100">TLS & Certificates</h3>
-                <div className="text-zinc-400 leading-relaxed space-y-3">
-                  <p>
-                    Cloudflare CA Origin Certificates are used to secure the connection between Cloudflare and the local server. Public TLS termination occurs at Cloudflare's edge, with origin certificates securing the tunnel-to-Nginx connection.
-                  </p>
-                  <p>
-                    This setup provides end-to-end encryption: <span className="text-cyan-400 font-mono text-sm">Browser → Cloudflare (public cert) → Tunnel (encrypted) → Nginx (origin cert) → Services</span>
-                  </p>
+            {activeTab === "security" && (
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
+                {/* TLS & Services */}
+                <div className="lg:col-span-1 space-y-6 text-[rgba(255,255,255,0.68)]">
+                  <div className="space-y-2">
+                    <span className="text-[11px] uppercase tracking-wider text-[#F7F5F1] block font-bold">
+                      TLS & Certificates
+                    </span>
+                    <p className="leading-relaxed font-sans font-light text-[15px]">
+                      Cloudflare CA Origin Certificates secure the connection between Cloudflare and the local server. Public TLS termination occurs at Cloudflare's edge, with origin certificates securing the tunnel-to-Nginx connection.
+                    </p>
+                    <p className="leading-relaxed font-sans font-light text-[15px]">
+                      This setup provides end-to-end encryption: <span className="text-emerald-500 font-mono text-[13px] block mt-1">Browser → Cloudflare (public cert) → Tunnel (encrypted) → Nginx (origin cert) → Services</span>
+                    </p>
+                  </div>
+                  <div className="space-y-2">
+                    <span className="text-[11px] uppercase tracking-wider text-[#F7F5F1] block font-bold">
+                      Services Hosted
+                    </span>
+                    <p className="leading-relaxed font-sans font-light text-[15px]">
+                      All services run on a private internal network and are only accessible via the reverse proxy. Direct access to service ports is blocked by the host firewall.
+                    </p>
+                    <ul className="space-y-1.5 font-sans font-light text-[14px] text-[rgba(255,255,255,0.8)] mt-2">
+                      <li className="flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#B36A2E]" />
+                        <a href="https://nextcloud.com" target="_blank" rel="noopener noreferrer" className="hover:text-[#B36A2E] flex items-center gap-1 transition-colors font-medium">
+                          Nextcloud <ExternalLink className="w-3 h-3 text-[rgba(255,255,255,0.4)]" />
+                        </a>{" "}
+                        - Cloud storage & sync
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#B36A2E]" />
+                        <a href="https://n8n.io" target="_blank" rel="noopener noreferrer" className="hover:text-[#B36A2E] flex items-center gap-1 transition-colors font-medium">
+                          n8n <ExternalLink className="w-3 h-3 text-[rgba(255,255,255,0.4)]" />
+                        </a>{" "}
+                        - Workflow automation
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#B36A2E]" />
+                        <a href="https://plausible.io" target="_blank" rel="noopener noreferrer" className="hover:text-[#B36A2E] flex items-center gap-1 transition-colors font-medium">
+                          Plausible <ExternalLink className="w-3 h-3 text-[rgba(255,255,255,0.4)]" />
+                        </a>{" "}
+                        - Web analytics
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#B36A2E]" />
+                        <a href="https://github.com/coder/code-server" target="_blank" rel="noopener noreferrer" className="hover:text-[#B36A2E] flex items-center gap-1 transition-colors font-medium">
+                          Code Server <ExternalLink className="w-3 h-3 text-[rgba(255,255,255,0.4)]" />
+                        </a>{" "}
+                        - Web-based VS Code
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#B36A2E]" />
+                        <strong>Custom Apps</strong> - Backend and frontend services
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+
+                {/* Security Notes Grid */}
+                <div className="lg:col-span-2 space-y-6">
+                  <div className="bg-[#151515] border border-[rgba(255,255,255,0.08)] rounded-md p-8 shadow-xs">
+                    <span className="text-[11px] uppercase tracking-wider text-[#F7F5F1] block font-bold mb-6 font-mono">
+                      [SECURITY HARDENING MATRIX]
+                    </span>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="p-5 border border-[rgba(255,255,255,0.04)] bg-[rgba(255,255,255,0.01)] rounded-sm space-y-2">
+                        <div className="flex items-center gap-2">
+                          <ShieldCheck className="w-4 h-4 text-emerald-500" />
+                          <h5 className="text-[14px] font-sans font-semibold text-[#F7F5F1]">No Inbound Exposure</h5>
+                        </div>
+                        <p className="text-[13px] font-sans font-light text-[rgba(255,255,255,0.6)] leading-relaxed">
+                          All public services route exclusively through Cloudflare Tunnel daemon connections. No inbound router/firewall ports are open to the internet.
+                        </p>
+                      </div>
+
+                      <div className="p-5 border border-[rgba(255,255,255,0.04)] bg-[rgba(255,255,255,0.01)] rounded-sm space-y-2">
+                        <div className="flex items-center gap-2">
+                          <ShieldCheck className="w-4 h-4 text-emerald-500" />
+                          <h5 className="text-[14px] font-sans font-semibold text-[#F7F5F1]">Firewall Isolation</h5>
+                        </div>
+                        <p className="text-[13px] font-sans font-light text-[rgba(255,255,255,0.6)] leading-relaxed">
+                          UFW firewall blocks direct access to all service ports on the host system, ensuring all traffic must route via local Nginx.
+                        </p>
+                      </div>
+
+                      <div className="p-5 border border-[rgba(255,255,255,0.04)] bg-[rgba(255,255,255,0.01)] rounded-sm space-y-2">
+                        <div className="flex items-center gap-2">
+                          <ShieldCheck className="w-4 h-4 text-emerald-500" />
+                          <h5 className="text-[14px] font-sans font-semibold text-[#F7F5F1]">Service Isolation</h5>
+                        </div>
+                        <p className="text-[13px] font-sans font-light text-[rgba(255,255,255,0.6)] leading-relaxed">
+                          Applications run in isolated Docker containers with minimal privileges, restricting directory traversal and process escaping.
+                        </p>
+                      </div>
+
+                      <div className="p-5 border border-[rgba(255,255,255,0.04)] bg-[rgba(255,255,255,0.01)] rounded-sm space-y-2">
+                        <div className="flex items-center gap-2">
+                          <ShieldCheck className="w-4 h-4 text-emerald-500" />
+                          <h5 className="text-[14px] font-sans font-semibold text-[#F7F5F1]">TLS Hardening</h5>
+                        </div>
+                        <p className="text-[13px] font-sans font-light text-[rgba(255,255,255,0.6)] leading-relaxed">
+                          End-to-end encryption from browser to internal services, hardened with modern TLS 1.3 protocol and strong cipher limits.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
+            )}
 
-              {/* Services Hosted */}
-              <div className="space-y-4">
-                <h3 className="text-2xl font-semibold text-zinc-100">Services Hosted</h3>
-                <div className="text-zinc-400 leading-relaxed">
-                  <p className="mb-4">The infrastructure currently hosts the following services:</p>
-                  <ul className="space-y-2 list-disc list-inside text-zinc-400">
-                    <li><span className="text-zinc-300 font-medium">Nextcloud</span> - Self-hosted cloud storage and collaboration platform</li>
-                    <li><span className="text-zinc-300 font-medium">n8n</span> - Workflow automation and integration platform</li>
-                    <li><span className="text-zinc-300 font-medium">Plausible Analytics</span> - Privacy-focused web analytics</li>
-                    <li><span className="text-zinc-300 font-medium">Code Server</span> - Web-based VS Code instance</li>
-                    <li><span className="text-zinc-300 font-medium">Multiple custom applications</span> - Frontend and backend services for various projects</li>
-                  </ul>
-                  <p className="mt-4">
-                    All services run on a private internal network and are only accessible via the reverse proxy. Direct access to service ports is blocked by the host firewall.
-                  </p>
-                </div>
+            {activeTab === "why-self-host" && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
+                {[
+                  {
+                    title: "Complete Infrastructure Control",
+                    desc: "Total ownership of the technology stack—from hardware configuration to the virtualized application layer—enabling custom networking parameters, custom resource limits, and unlimited scaling without platform constraints."
+                  },
+                  {
+                    title: "Privacy by Design",
+                    desc: "Zero third-party data crawling, tracking cookies, or metadata collection. Complete data sovereignty over configuration lists, analytics histories, database dumps, and developer logs."
+                  },
+                  {
+                    title: "Engineering at Scale",
+                    desc: "Hands-on experience managing production-grade infrastructure, learning containerized deployment pipelines, handling hardware telemetry, troubleshooting system limits, and managing Nginx web gateways."
+                  },
+                  {
+                    title: "Production-Ready Systems",
+                    desc: "Real-world infrastructure serving live workloads and processing actual payloads. Every application is optimized for continuous uptime, hardware limits, and secure web availability."
+                  }
+                ].map((item, idx) => (
+                  <div
+                    key={item.title}
+                    className="p-6 md:p-8 bg-[#151515] border border-[rgba(255,255,255,0.08)] rounded-md flex flex-col justify-between space-y-4 font-mono text-[14px]"
+                  >
+                    <div className="space-y-3">
+                      <span className="font-mono text-[#B36A2E] text-[12px] tracking-wider uppercase block font-bold">
+                        Pillar [0{idx + 1}]
+                      </span>
+                      <h4 className="text-xl text-[#F7F5F1] font-serif font-normal">
+                        {item.title}
+                      </h4>
+                      <p className="text-[14px] font-sans font-light text-[rgba(255,255,255,0.68)] leading-relaxed">
+                        {item.desc}
+                      </p>
+                    </div>
+                  </div>
+                ))}
               </div>
+            )}
+          </Container>
+        </Section>
 
-              {/* Security Notes */}
-              <div className="space-y-4">
-                <h3 className="text-2xl font-semibold text-zinc-100">Security Notes</h3>
-                <div className="text-zinc-400 leading-relaxed">
-                  <ul className="space-y-3">
-                    <li className="flex items-start gap-3">
-                      <span className="text-emerald-400 flex-shrink-0 mt-1">✓</span>
-                      <span><span className="text-zinc-300 font-medium">No inbound ports exposed</span> - All services are accessible only through Cloudflare Tunnel</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <span className="text-emerald-400 flex-shrink-0 mt-1">✓</span>
-                      <span><span className="text-zinc-300 font-medium">Firewall enabled</span> - Nginx L7 firewall& UFW configured to block unauthorized access to service ports</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <span className="text-emerald-400 flex-shrink-0 mt-1">✓</span>
-                      <span><span className="text-zinc-300 font-medium">Internal service isolation</span> - Services run in isolated containers with minimal privileges</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <span className="text-emerald-400 flex-shrink-0 mt-1">✓</span>
-                      <span><span className="text-zinc-300 font-medium">TLS encryption</span> - End-to-end encryption from browser to internal services</span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section></>
-
-      {/* Philosophy Section */}
-      <section className="relative px-4 py-24 bg-zinc-900/30">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-5xl font-bold mb-4 bg-gradient-to-br from-zinc-100 to-zinc-400 bg-clip-text text-transparent">Why Self-Host?</h2>
-            <p className="text-zinc-500 text-lg max-w-2xl mx-auto">Building infrastructure that prioritizes control, privacy, and continuous learning</p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="space-y-3 group">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500/10 to-cyan-600/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                <div className="w-3 h-3 rounded-full bg-gradient-to-br from-cyan-400 to-cyan-500" />
-              </div>
-              <h3 className="text-xl font-semibold text-zinc-100">Complete Infrastructure Control</h3>
-              <p className="text-zinc-500 leading-relaxed">Total ownership of the technology stack—from hardware to application layer—enabling custom configurations and unlimited scalability</p>
+        {/* Contact Section */}
+        <Section id="contact">
+          <Container className="text-center space-y-12 py-12">
+            <div className="space-y-6">
+              <AnimatedText delay={0.1} className="text-4xl md:text-6xl text-[#1C1C1C]">
+                Let&apos;s build something meaningful.
+              </AnimatedText>
+              <AnimatedText delay={0.2} className="text-[18px] md:text-[20px] text-[#66635F] font-light max-w-xl mx-auto">
+                Seeking opportunities in Systems Architecture, Cloud Infrastructure, and Backend Engineering.
+              </AnimatedText>
             </div>
 
-            <div className="space-y-3 group">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500/10 to-blue-600/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                <div className="w-3 h-3 rounded-full bg-gradient-to-br from-blue-400 to-blue-500" />
-              </div>
-              <h3 className="text-xl font-semibold text-zinc-100">Privacy by Design</h3>
-              <p className="text-zinc-500 leading-relaxed">Zero third-party data access with complete data sovereignty—no tracking, no external dependencies, absolute control over information</p>
-            </div>
-
-            <div className="space-y-3 group">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500/10 to-purple-600/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                <div className="w-3 h-3 rounded-full bg-gradient-to-br from-purple-400 to-purple-500" />
-              </div>
-              <h3 className="text-xl font-semibold text-zinc-100">Engineering at Scale</h3>
-              <p className="text-zinc-500 leading-relaxed">Hands-on experience managing production-grade infrastructure, learning deployment patterns, monitoring, and optimization techniques</p>
-            </div>
-
-            <div className="space-y-3 group">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500/10 to-emerald-600/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                <div className="w-3 h-3 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-500" />
-              </div>
-              <h3 className="text-xl font-semibold text-zinc-100">Production-Ready Systems</h3>
-              <p className="text-zinc-500 leading-relaxed">Real infrastructure handling live workloads and traffic—not sandbox demos, but systems built for reliability and performance</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-
-      <section className="relative px-4 py-24">
-            <div className="max-w-5xl mx-auto text-center">
-              <div className="flex flex-wrap items-center justify-center gap-8 text-zinc-500">
-                <span className="text-sm font-medium tracking-wide hover:text-zinc-300 transition-colors cursor-default">
-                  Docker
-                </span>
-                <span className="text-zinc-700">·</span>
-                <span className="text-sm font-medium tracking-wide hover:text-zinc-300 transition-colors cursor-default">
-                  Linux
-                </span>
-                <span className="text-zinc-700">·</span>
-                <span className="text-sm font-medium tracking-wide hover:text-zinc-300 transition-colors cursor-default">
-                  FastAPI
-                </span>
-                <span className="text-zinc-700">·</span>
-                <span className="text-sm font-medium tracking-wide hover:text-zinc-300 transition-colors cursor-default">
-                  React
-                </span>
-                <span className="text-zinc-700">·</span>
-                <span className="text-sm font-medium tracking-wide hover:text-zinc-300 transition-colors cursor-default">
-                  Flutter
-                </span>
-                <span className="text-zinc-700">·</span>
-                <span className="text-sm font-medium tracking-wide hover:text-zinc-300 transition-colors cursor-default">
-                  CI/CD
-                </span>
-                <span className="text-zinc-700">·</span>
-                <span className="text-sm font-medium tracking-wide hover:text-zinc-300 transition-colors cursor-default">
-                  Cloudflare
-                </span>
-              </div>
-            </div>
-          </section>
-
-      {/* Footer */}
-      <footer className="relative px-4 py-16 border-t border-zinc-800">
-        <div className="max-w-5xl mx-auto">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-            <div className="flex items-center gap-6">
-              <Link
-                href="https://github.com/KALI-THE-HACKER"
-                className="text-zinc-500 hover:text-zinc-300 transition-colors"
-                target="_blank"
-                rel="noopener noreferrer"
+            <AnimatedText delay={0.3} className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+              <a
+                href="mailto:admin@luckylinux.dev"
+                className="inline-flex items-center gap-2 px-6 py-3.5 bg-[#1C1C1C] text-[#F9F7F3] rounded-md hover:bg-[#2c2c2c] transition-all hover:scale-[1.02] active:scale-[0.98] duration-200"
               >
-                <Github className="w-5 h-5" />
-                <span className="sr-only">GitHub</span>
-              </Link>
-              <Link
+                <Mail className="w-4 h-4" />
+                admin@luckylinux.dev
+              </a>
+              <a
                 href="https://linkedin.com/in/luckylinux"
-                className="text-zinc-500 hover:text-zinc-300 transition-colors"
                 target="_blank"
                 rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-6 py-3.5 text-[#1C1C1C] border border-[rgba(0,0,0,0.12)] rounded-md hover:bg-[#F6F3ED] transition-all hover:scale-[1.02] active:scale-[0.98] duration-200"
               >
-                <Linkedin className="w-5 h-5" />
-                <span className="sr-only">LinkedIn</span>
-              </Link>
-            </div>
-            <p className="text-sm text-zinc-500 text-center md:text-right italic">
-              An evolving universe. Still expanding.
-            </p>
-          </div>
-        </div>
-      </footer>
+                <Linkedin className="w-4 h-4 text-[#66635F]" />
+                Connect on LinkedIn
+              </a>
+            </AnimatedText>
+          </Container>
+        </Section>
+      </main>
+
+      <Footer />
     </div>
   )
 }
