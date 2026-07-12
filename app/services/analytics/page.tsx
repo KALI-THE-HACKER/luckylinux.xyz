@@ -1,11 +1,52 @@
+import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowLeft, BarChart3, Check, Eye, Globe, Map, Smartphone, TrendingUp, Cpu, ShieldAlert, ExternalLink } from "lucide-react"
+
+export const metadata: Metadata = {
+  title: "Plausible Analytics | Self-Hosted Developer Services | Luckylinux",
+  description: "Get a privacy-first, cookieless web analytics tracking account powered by Plausible, hosted on Luckylinux's private server. Keep complete ownership of your visitor data.",
+  alternates: {
+    canonical: "/services/analytics",
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://luckylinux.dev/services/analytics",
+    siteName: "Luckylinux's Self-Hosted Universe",
+    title: "Plausible Analytics | Self-Hosted Developer Services | Luckylinux",
+    description: "Privacy-first, cookie-free web analytics tracking powered by Plausible Analytics on Luckylinux's private server.",
+  }
+}
 
 export default function AnalyticsPage() {
   const mailtoLink = `mailto:admin@luckylinux.dev?subject=Requesting%20Free%20Plausible%20Analytics%20Account&body=Hi%2C%0A%0AI%20am%20interested%20in%20setting%20up%20analytics%20tracking%20for%20my%20website%20using%20your%20self-hosted%20Plausible%20instance.%0A%0AWebsite%20Domain%3A%20%0AName%3A%20%0A%0AThank%20you!`
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": "Self-Hosted Plausible Analytics",
+    "serviceType": "Web Analytics Hosting",
+    "provider": {
+      "@type": "Person",
+      "name": "Lucky Verma",
+      "url": "https://luckylinux.dev"
+    },
+    "description": "Privacy-first, cookie-free audience tracking powered by Plausible Analytics, hosted on a private server. Offers free accounts for developer projects.",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD",
+      "description": "Free developer hosting for colleagues and friends."
+    }
+  }
+
   return (
-    <div className="min-h-screen bg-[#F9F7F3] text-[#1C1C1C] flex flex-col font-sans selection:bg-[#B36A2E]/10 selection:text-[#B36A2E]">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <div className="min-h-screen bg-[#F9F7F3] text-[#1C1C1C] flex flex-col font-sans selection:bg-[#B36A2E]/10 selection:text-[#B36A2E]">
       {/* Header */}
       <header className="relative px-6 py-6 border-b border-[rgba(0,0,0,0.08)] bg-[#F9F7F3] z-10 select-none">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
@@ -177,5 +218,6 @@ export default function AnalyticsPage() {
         </div>
       </section>
     </div>
+    </>
   )
 }

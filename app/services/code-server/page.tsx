@@ -1,12 +1,45 @@
+import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowLeft, Code, Check, Shield, Terminal, Cpu, Globe, Activity, ExternalLink } from "lucide-react"
 
+export const metadata: Metadata = {
+  title: "VS Code Server | Self-Hosted Developer Services | Luckylinux",
+  description: "A private, zero-dependency VS Code workspace containerized and hosted on dedicated server hardware by Luckylinux. Access your code editor from any remote browser.",
+  alternates: {
+    canonical: "/services/code-server",
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://luckylinux.dev/services/code-server",
+    siteName: "Luckylinux's Self-Hosted Universe",
+    title: "VS Code Server | Self-Hosted Developer Services | Luckylinux",
+    description: "Containerized, zero-dependency VS Code editor accessible from any remote browser, hosted on Luckylinux's private server.",
+  }
+}
 
 export default function CodeServerPage() {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": "Self-Hosted VS Code Server",
+    "serviceType": "Cloud Development Environment",
+    "provider": {
+      "@type": "Person",
+      "name": "Lucky Verma",
+      "url": "https://luckylinux.dev"
+    },
+    "description": "A private, zero-dependency VS Code workspace containerized and hosted on dedicated server hardware. Provides secure terminal sessions and persistent dev tools."
+  }
   const mailtoLink = `mailto:admin@luckylinux.dev?subject=Code%20Server%20Collaboration&body=Hi%2C%0A%0AI%20am%20interested%20in%20discussing%20or%20collaborating%20on%20your%20self-hosted%20coder/code-server%20environment.%0A%0AName%3A%20%0AEmail%3A%20%0A%0AThank%20you!`
 
   return (
-    <div className="min-h-screen bg-[#F9F7F3] text-[#1C1C1C] flex flex-col font-sans selection:bg-[#B36A2E]/10 selection:text-[#B36A2E]">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <div className="min-h-screen bg-[#F9F7F3] text-[#1C1C1C] flex flex-col font-sans selection:bg-[#B36A2E]/10 selection:text-[#B36A2E]">
       {/* Header */}
       <header className="relative px-6 py-6 border-b border-[rgba(0,0,0,0.08)] bg-[#F9F7F3] z-10 select-none">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
@@ -160,5 +193,6 @@ export default function CodeServerPage() {
         </div>
       </section>
     </div>
+    </>
   )
 }

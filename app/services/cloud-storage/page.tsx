@@ -1,7 +1,36 @@
+import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowLeft, Cloud, Check, Shield, Lock, Zap, HardDrive, Terminal, ExternalLink } from "lucide-react"
 
+export const metadata: Metadata = {
+  title: "Nextcloud Storage | Self-Hosted Developer Services | Luckylinux",
+  description: "Secure, fully encrypted personal cloud storage, WebDAV mounts, and collaborative document editing powered by Nextcloud, hosted on Luckylinux's private server.",
+  alternates: {
+    canonical: "/services/cloud-storage",
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://luckylinux.dev/services/cloud-storage",
+    siteName: "Luckylinux's Self-Hosted Universe",
+    title: "Nextcloud Storage | Self-Hosted Developer Services | Luckylinux",
+    description: "Fully encrypted personal cloud storage and WebDAV file sync powered by Nextcloud on Luckylinux's private server.",
+  }
+}
+
 export default function CloudStoragePage() {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": "Self-Hosted Nextcloud Cloud Storage",
+    "serviceType": "Encrypted Cloud Storage & Sync",
+    "provider": {
+      "@type": "Person",
+      "name": "Lucky Verma",
+      "url": "https://luckylinux.dev"
+    },
+    "description": "Secure, fully encrypted file storage, WebDAV mounts, and document synchronization hosted on a private server."
+  }
   const createMailtoLink = () => {
     const subject = `Nextcloud Storage Collaboration Request`
     const body = `Hi,
@@ -14,7 +43,12 @@ Thank you!`
   }
 
   return (
-    <div className="min-h-screen bg-[#F9F7F3] text-[#1C1C1C] flex flex-col font-sans selection:bg-[#B36A2E]/10 selection:text-[#B36A2E]">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <div className="min-h-screen bg-[#F9F7F3] text-[#1C1C1C] flex flex-col font-sans selection:bg-[#B36A2E]/10 selection:text-[#B36A2E]">
       {/* Header */}
       <header className="relative px-6 py-6 border-b border-[rgba(0,0,0,0.08)] bg-[#F9F7F3] z-10 select-none">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
@@ -182,5 +216,6 @@ Thank you!`
         </div>
       </section>
     </div>
+    </>
   )
 }

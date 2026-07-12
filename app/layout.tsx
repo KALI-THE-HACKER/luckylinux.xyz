@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import "./globals.css"
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://luckylinux.dev"),
   title: "Luckylinux's Portfolio",
   description:
     "Personal portfolio and self-hosted showcase of Lucky Verma, a backend and infrastructure engineer.",

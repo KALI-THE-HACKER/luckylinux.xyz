@@ -1,11 +1,45 @@
+import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowLeft, Workflow, Check, Zap, Code, Globe, Blocks, Settings, ShieldAlert, ExternalLink } from "lucide-react"
 
+export const metadata: Metadata = {
+  title: "n8n Automation | Self-Hosted Developer Services | Luckylinux",
+  description: "Dedicated member accounts for visual workflow automation and node-based API scripting powered by n8n, hosted on Luckylinux's private server.",
+  alternates: {
+    canonical: "/services/n8n",
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://luckylinux.dev/services/n8n",
+    siteName: "Luckylinux's Self-Hosted Universe",
+    title: "n8n Automation | Self-Hosted Developer Services | Luckylinux",
+    description: "Visual workflow automation and node-based API scripting hosted on Luckylinux's private server.",
+  }
+}
+
 export default function N8nPage() {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": "Self-Hosted n8n Workflow Automation",
+    "serviceType": "Visual Workflow Automation",
+    "provider": {
+      "@type": "Person",
+      "name": "Lucky Verma",
+      "url": "https://luckylinux.dev"
+    },
+    "description": "Dedicated member accounts on shared visual workflow automation tool n8n. Link more than 350 third-party APIs, run background cron jobs, and map webhooks effortlessly."
+  }
   const mailtoLink = `mailto:admin@luckylinux.dev?subject=Requesting%20Free%20n8n%20Account&body=Hi%2C%0A%0AI%20am%20interested%20in%20setting%20up%20a%20free%20member%20account%20on%20your%20self-hosted%20n8n%20instance.%0A%0AName%3A%20%0AEmail%3A%20%0A%0AThank%20you!`
 
   return (
-    <div className="min-h-screen bg-[#F9F7F3] text-[#1C1C1C] flex flex-col font-sans selection:bg-[#B36A2E]/10 selection:text-[#B36A2E]">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <div className="min-h-screen bg-[#F9F7F3] text-[#1C1C1C] flex flex-col font-sans selection:bg-[#B36A2E]/10 selection:text-[#B36A2E]">
       {/* Header */}
       <header className="relative px-6 py-6 border-b border-[rgba(0,0,0,0.08)] bg-[#F9F7F3] z-10 select-none">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
@@ -177,5 +211,6 @@ export default function N8nPage() {
         </div>
       </section>
     </div>
+    </>
   )
 }
