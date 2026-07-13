@@ -40,7 +40,7 @@ export function Hero() {
       <div className="absolute inset-0 w-full h-full overflow-hidden select-none pointer-events-none z-0">
         <video
           ref={videoRef}
-          src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260602_150901_c45b90ec-18d7-42ff-90e2-b95d7109e330.mp4"
+          src="/hero-video.mp4"
           muted
           playsInline
           className="w-full h-full object-cover object-bottom animate-fade-in"

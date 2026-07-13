@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react"
 import Link from "next/link"
-import { Github, Linkedin, Menu, X } from "lucide-react"
+import { Github, Linkedin, Menu, X, ArrowUpRight } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 export function Navbar() {
@@ -204,16 +204,41 @@ export function Navbar() {
 
           <div className="mt-12 pt-8 border-t border-[rgba(0,0,0,0.08)] flex flex-col gap-4">
             <a
-              href="https://linkedin.com/in/luckylinux"
+              href="/lucky-resume-1.pdf"
               target="_blank"
               rel="noopener noreferrer"
               className="w-full inline-flex items-center justify-center py-3 text-base font-medium bg-[#1C1C1C] text-[#F9F7F3] rounded-md hover:bg-[#333333] transition-all hover:scale-[1.02]"
             >
-              Download Resume
+              Resume
             </a>
           </div>
         </div>
       )}
+
+      {/* Floating Resume button for small screens */}
+      <a
+        href="/lucky-resume-1.pdf"
+        target="_blank"
+        rel="noopener noreferrer"
+        className={cn(
+          "fixed bottom-6 right-6 z-50 flex items-center gap-3 pl-2 pr-4.5 py-2 rounded-full shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-300 ease-in-out sm:hidden group border theme-transition",
+          isDarkSection 
+            ? "bg-[#F7F5F1]/95 text-[#1C1C1C] border-[rgba(0,0,0,0.1)]"
+            : "bg-[#0D0D0D]/95 text-[#F7F5F1] border-[rgba(255,255,255,0.1)]"
+        )}
+      >
+        <div className="relative w-8 h-8 rounded-full overflow-hidden border border-[#B36A2E]/60 flex-shrink-0">
+          <img
+            src="/profile_img.png"
+            alt="Lucky Verma"
+            className="w-full h-full object-cover"
+          />
+        </div>
+        <span className="text-[13px] font-medium font-mono tracking-wide flex items-center gap-1">
+          Resume
+          <ArrowUpRight className="w-3.5 h-3.5 text-[#B36A2E] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+        </span>
+      </a>
     </>
   )
 }

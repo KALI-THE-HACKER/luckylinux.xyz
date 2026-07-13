@@ -68,7 +68,9 @@ export default function HomeClient() {
       tags: ["WebSockets", "FastAPI", "Psutil", "React", "JWT", "Systems"],
       githubUrl: "https://github.com/KALI-THE-HACKER/server-dashboard",
       outcome: "Eliminated public SSH exposures by establishing a token-authenticated web based terminal connection directly integrated with Host Process isolation. So that I can control my server from anywhere any device.",
-      imageUrl: "/dashboard-mockup.png"
+      imageUrl: "/dashboard-mockup.png",
+      videoUrlDesktop: "/server-dash-desktop-demo.mp4",
+      videoUrlMobile: "/server-dash-mobile-demo.mp4"
     }
   ]
 
@@ -381,6 +383,8 @@ export default function HomeClient() {
                   index={index}
                   status={project.status}
                   images={project.images}
+                  videoUrlDesktop={(project as any).videoUrlDesktop}
+                  videoUrlMobile={(project as any).videoUrlMobile}
                 />
               ))}
             </div>

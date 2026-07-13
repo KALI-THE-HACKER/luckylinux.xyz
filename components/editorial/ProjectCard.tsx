@@ -17,6 +17,8 @@ interface ProjectCardProps {
   index: number
   status?: string
   images?: string[]
+  videoUrlDesktop?: string
+  videoUrlMobile?: string
 }
 
 export function ProjectCard({
@@ -29,12 +31,15 @@ export function ProjectCard({
   imageUrl,
   index,
   status,
-  images
+  images,
+  videoUrlDesktop,
+  videoUrlMobile
 }: ProjectCardProps) {
   const isEven = index % 2 === 0
   const hasMultipleImages = images && images.length > 1
   const [currentIndex, setCurrentIndex] = React.useState(0)
   const [isPlaying, setIsPlaying] = React.useState(true)
+  const [viewMode, setViewMode] = React.useState<"desktop" | "mobile">("desktop")
 
   React.useEffect(() => {
     if (!hasMultipleImages || !isPlaying) return
@@ -71,7 +76,66 @@ export function ProjectCard({
       {/* Visual Showcase (Visuals support the content) */}
       <AnimatedText delay={0.2} duration={0.8} y={15} className="w-full lg:w-1/2">
         <div className="relative group flex flex-col gap-3 p-3 border border-[rgba(0,0,0,0.08)] bg-[#F6F3ED] rounded-md transition-all hover:scale-[1.01] duration-300">
-          {hasMultipleImages ? (
+          {videoUrlDesktop && videoUrlMobile ? (
+            <div className="flex flex-col gap-3 w-full">
+              <div className={cn(
+                "relative w-full overflow-hidden rounded-xs bg-[#0D0D0D] flex items-center justify-center transition-all duration-500 ease-in-out",
+                viewMode === "desktop" ? "max-h-[380px]" : "max-h-[750px]"
+              )}>
+                <video
+                  key={viewMode}
+                  src={viewMode === "desktop" ? videoUrlDesktop : videoUrlMobile}
+                  muted
+                  playsInline
+                  autoPlay
+                  loop
+                  className={cn(
+                    "w-full h-auto object-contain select-none transition-all duration-500 ease-in-out",
+                    viewMode === "desktop" ? "max-h-[380px]" : "max-h-[750px]"
+                  )}
+                />
+              </div>
+
+              {/* Controls Bar for Video Switch */}
+              <div className="flex items-center justify-between w-full px-3 py-2 bg-[rgba(0,0,0,0.02)] border border-[rgba(0,0,0,0.06)] rounded-xs">
+                <span className="text-[11px] font-mono text-[#66635F] uppercase tracking-wider pl-1">
+                  Demo Mode
+                </span>
+                <div className="flex bg-[#1C1C1C] rounded-full p-0.5 shadow-sm select-none">
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      setViewMode("desktop")
+                    }}
+                    className={cn(
+                      "px-3 py-1 text-[11px] font-mono rounded-full transition-all duration-200 cursor-pointer",
+                      viewMode === "desktop"
+                        ? "bg-[#F7F5F1] text-[#1C1C1C] font-semibold"
+                        : "text-[rgba(255,255,255,0.6)] hover:text-white"
+                    )}
+                  >
+                    Desktop
+                  </button>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      setViewMode("mobile")
+                    }}
+                    className={cn(
+                      "px-3 py-1 text-[11px] font-mono rounded-full transition-all duration-200 cursor-pointer",
+                      viewMode === "mobile"
+                        ? "bg-[#F7F5F1] text-[#1C1C1C] font-semibold"
+                        : "text-[rgba(255,255,255,0.6)] hover:text-white"
+                    )}
+                  >
+                    Mobile
+                  </button>
+                </div>
+              </div>
+            </div>
+          ) : hasMultipleImages ? (
             <div className="relative w-full aspect-[16/12] max-h-[480px] overflow-hidden rounded-xs bg-[#F6F3ED] flex items-center justify-center">
               {/* Slides */}
               {images.map((img, idx) => (
