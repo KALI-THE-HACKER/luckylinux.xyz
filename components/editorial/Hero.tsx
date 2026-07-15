@@ -40,7 +40,7 @@ export function Hero() {
       <div className="absolute inset-0 w-full h-full overflow-hidden select-none pointer-events-none z-0">
         <video
           ref={videoRef}
-          src="/hero-video.mp4"
+          src="https://cdn.luckylinux.dev/portfolio-assets/hero-video.mp4"
           muted
           playsInline
           className="w-full h-full object-cover object-bottom animate-fade-in"

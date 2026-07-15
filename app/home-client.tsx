@@ -43,7 +43,7 @@ export default function HomeClient() {
       liveUrl: "https://railsplit.luckylinux.dev",
       githubUrl: "https://github.com/KALI-THE-HACKER/Railsplit",
       outcome: "Designed a custom search-space pruning algorithm using ellipse-constrained station selection for fast split-route optimization.",
-      imageUrl: "/railsplit-mockup.png",
+      imageUrl: "https://cdn.luckylinux.dev/portfolio-assets/railsplit-mockup.png",
       images: ["/railsplit-mockup.png", "/railsplit-backend-logic-chart.png"]
     },
     {
@@ -52,7 +52,7 @@ export default function HomeClient() {
       tags: ["ReactJS", "TailwindCSS", "FastAPI", "ChromaDB", "MySQL", "Agentic AI"],
       githubUrl: "https://github.com/KALI-THE-HACKER/chronocare",
       outcome: "Built an interactive 3D human body mapper synced with relational schemas, integrated with a vector database RAG search pipeline.",
-      imageUrl: "/chronocare-mockup.webm"
+      imageUrl: "https://cdn.luckylinux.dev/portfolio-assets/chronocare-mockup.webm"
     },
     {
       name: "SysSight",
@@ -68,9 +68,9 @@ export default function HomeClient() {
       tags: ["WebSockets", "FastAPI", "Psutil", "React", "JWT", "Systems"],
       githubUrl: "https://github.com/KALI-THE-HACKER/server-dashboard",
       outcome: "Eliminated public SSH exposures by establishing a token-authenticated web based terminal connection directly integrated with Host Process isolation. So that I can control my server from anywhere any device.",
-      imageUrl: "/dashboard-mockup.png",
-      videoUrlDesktop: "/server-dash-desktop-demo.mp4",
-      videoUrlMobile: "/server-dash-mobile-demo.mp4"
+      imageUrl: "https://cdn.luckylinux.dev/portfolio-assets/dashboard-mockup.png",
+      videoUrlDesktop: "https://cdn.luckylinux.dev/portfolio-assets/server-dash-desktop-demo.mp4",
+      videoUrlMobile: "https://cdn.luckylinux.dev/portfolio-assets/server-dash-mobile-demo.mp4"
     }
   ]
 
@@ -341,7 +341,7 @@ export default function HomeClient() {
               <div className="lg:col-span-5 flex justify-center animate-fade-in">
                 <div className="relative w-full max-w-[340px] aspect-square rounded-md overflow-hidden border border-[rgba(0,0,0,0.08)] bg-[#F6F3ED] shadow-xs">
                   <img
-                    src="/profile_img.png"
+                    src="https://cdn.luckylinux.dev/portfolio-assets/profile_img.png"
                     alt="Luckylinux's Profile"
                     className="w-full h-full object-cover select-none"
                   />
