@@ -125,12 +125,12 @@ export default function HomeClient() {
     },
     {
       organization: "Katha AI",
-      role: "Developer",
-      duration: "June 2025 — Present",
+      role: "Project Associate",
+      duration: "Jan 2026 — Present",
       description: <>Industry Project under <Link href="https://cse.nitk.ac.in/faculty/mohit-p-tahiliani" target="_blank" className="inline-flex items-center gap-1 hover:text-[#B36A2E] underline transition-colors">Prof. Mohit P. Tahiliani<ExternalLink className="w-3.5 h-3.5 text-[#B36A2E] shrink-0" /></Link>, CSE Department, NITK</>,
       achievements: [
-        <>Developed core frontend and backend modules for an AI-powered storytelling platform using <span className="font-medium text-[#2E2C2A]">React</span>, <span className="font-medium text-[#2E2C2A]">Django REST Framework</span>, and <span className="font-medium text-[#2E2C2A]">PostgreSQL</span>.</>,
-        <>Integrated <span className="font-medium text-[#2E2C2A]">Cloudflare R2</span> for scalable media delivery and developed REST APIs for books, scenes, metadata, and AI-generated multimedia assets.</>
+        <>Architected <span className="font-medium text-[#2E2C2A]">Django REST</span> + <span className="font-medium text-[#2E2C2A]">React</span> services with a model spanning <span className="font-medium text-[#2E2C2A]">20+ entities</span>, backed by <span className="font-medium text-[#2E2C2A]">PostgreSQL</span>.</>,
+        <>Engineered production-grade media infrastructure using <span className="font-medium text-[#2E2C2A]">Cloudflare R2</span>, implementing dual-bucket isolation, environment-driven <span className="font-medium text-[#2E2C2A]">django-storages</span> routing, CDN delivery, and pre-signed URL access for protected assets.</>
       ]
     },
     {
@@ -152,9 +152,8 @@ export default function HomeClient() {
       duration: "Sep 2025 — Present",
       description: "Building and deploying full-stack web applications for real-world clients.",
       achievements: [
-        <>Built and deployed <span className="font-medium text-[#2E2C2A]">full-stack web applications</span> for real-world clients using modern web technologies.</>,
-        <>Developed backend APIs, managed databases, and automated deployments using <span className="font-medium text-[#2E2C2A]">Docker</span> and DevOps workflows.</>,
-        <>Collaborated with cross-functional teams to deliver scalable, production-ready software solutions.</>
+        <>Built an <span className="font-medium text-[#2E2C2A]">AI-powered analytics dashboard</span> for an EdTech client, translating business requirements into performance analytics, advanced filtering, LLM-powered insights, and interactive visualizations.</>,
+        <>Integrated <span className="font-medium text-[#2E2C2A]">Cloudflare Workers</span> and <span className="font-medium text-[#2E2C2A]">LiveKit Agent</span> to support scalable AI workflows and prod deployment</>
       ]
     }
   ]
