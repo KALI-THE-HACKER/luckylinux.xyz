@@ -31,6 +31,7 @@ export default function HomeClient() {
       name: "OpportuneAI",
       description: "An AI-powered job discovery and application copilot that aggregates opportunities from multiple job platforms and transforms unstructured listings into structured, searchable data. It combines large language models with an intelligent background worker pipeline to recommend the most relevant opportunities based on a candidate's resume, skills, and preferences.",
       tags: ["FastAPI", "LangChain", "LangGraph", "PostgreSQL", "Playwright", "Redis", "RQ", "Gemini", "OpenRouter"],
+      liveUrl: "https://opportuneai.luckylinux.dev",
       githubUrl: "https://github.com/KALI-THE-HACKER/OpportuneAI",
       outcome: "Architected a modular AI-powered job aggregation platform featuring provider-based ingestion, content-hash deduplication, asynchronous processing with Redis Queue, and resume-aware job ranking.",
       imageUrl: "https://cdn.luckylinux.dev/opportuneai-assets/saas-video.mp4",
