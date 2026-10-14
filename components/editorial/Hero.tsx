@@ -43,6 +43,8 @@ export function Hero() {
           src="https://cdn.luckylinux.dev/portfolio-assets/hero-video.mp4"
           muted
           playsInline
+          crossOrigin="anonymous"
+          suppressHydrationWarning
           className="w-full h-full object-cover object-bottom animate-fade-in"
           style={{ opacity: videoOpacity }}
         />

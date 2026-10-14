@@ -33,7 +33,13 @@ export default function HomeClient() {
       tags: ["FastAPI", "LangChain", "LangGraph", "PostgreSQL", "Playwright", "Redis", "RQ", "Gemini", "OpenRouter"],
       githubUrl: "https://github.com/KALI-THE-HACKER/OpportuneAI",
       outcome: "Architected a modular AI-powered job aggregation platform featuring provider-based ingestion, content-hash deduplication, asynchronous processing with Redis Queue, and resume-aware job ranking.",
-      imageUrl: "placeholder",
+      imageUrl: "https://cdn.luckylinux.dev/opportuneai-assets/saas-video.mp4",
+      mediaItems: [
+        {
+          url: "https://cdn.luckylinux.dev/opportuneai-assets/saas-video.mp4",
+          caption: "Product Demo"
+        }
+      ],
       status: "Under Development"
     },
     {
@@ -384,6 +390,7 @@ export default function HomeClient() {
                   images={project.images}
                   videoUrlDesktop={(project as any).videoUrlDesktop}
                   videoUrlMobile={(project as any).videoUrlMobile}
+                  mediaItems={(project as any).mediaItems}
                 />
               ))}
             </div>
