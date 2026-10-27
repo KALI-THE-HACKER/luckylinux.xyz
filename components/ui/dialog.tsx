@@ -61,7 +61,7 @@ const DialogHeader = React.forwardRef<
         className
       )}
       {...propsRest}
-    >
+    />
   )
 })
 DialogHeader.displayName = "DialogHeader"
@@ -79,7 +79,7 @@ const DialogFooter = React.forwardRef<
         className
       )}
       {...propsRest}
-    >
+    />
   )
 })
 DialogFooter.displayName = "DialogFooter"
