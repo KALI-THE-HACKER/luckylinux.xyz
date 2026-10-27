@@ -2,13 +2,15 @@
 
 import React, { useState, useEffect } from "react"
 import Link from "next/link"
-import { Github, Linkedin, Menu, X, ArrowUpRight } from "lucide-react"
+import { Github, Linkedin, Menu, X, ArrowUpRight, FileText } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { ResumePreview } from "@/components/ResumePreview"
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isDarkSection, setIsDarkSection] = useState(false)
+  const [resumeOpen, setResumeOpen] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -17,7 +19,7 @@ export function Navbar() {
 
     const observerOptions = {
       root: null,
-      rootMargin: "-10% 0px -80% 0px", // triggers when section is in top viewport area
+      rootMargin: "-10% 0px -80% 0px",
       threshold: 0
     }
 
@@ -132,10 +134,8 @@ export function Navbar() {
             >
               <Linkedin className="w-5 h-5" />
             </Link>
-            <a
-              href="https://cdn.luckylinux.dev/portfolio-assets/lucky-resume-1.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              onClick={() => setResumeOpen(true)}
               className={cn(
                 "hidden sm:inline-flex items-center justify-center px-4 py-2 text-[14px] font-medium rounded-md transition-all hover:scale-[1.02] active:scale-[0.98] duration-200 theme-transition",
                 isDarkSection
@@ -143,8 +143,9 @@ export function Navbar() {
                   : "bg-[#1C1C1C] text-[#F9F7F3] hover:bg-[#333333]"
               )}
             >
+              <FileText className="w-4 h-4 mr-2" />
               Resume
-            </a>
+            </button>
 
             {/* Mobile Menu Button */}
             <button
@@ -203,23 +204,20 @@ export function Navbar() {
           </nav>
 
           <div className="mt-12 pt-8 border-t border-[rgba(0,0,0,0.08)] flex flex-col gap-4">
-            <a
-              href="https://cdn.luckylinux.dev/portfolio-assets/lucky-resume-1.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              onClick={() => setResumeOpen(true)}
               className="w-full inline-flex items-center justify-center py-3 text-base font-medium bg-[#1C1C1C] text-[#F9F7F3] rounded-md hover:bg-[#333333] transition-all hover:scale-[1.02]"
             >
+              <FileText className="w-4 h-4 mr-2" />
               Resume
-            </a>
+            </button>
           </div>
         </div>
       )}
 
       {/* Floating Resume button for small screens */}
-      <a
-        href="https://cdn.luckylinux.dev/portfolio-assets/lucky-resume-1.pdf"
-        target="_blank"
-        rel="noopener noreferrer"
+      <button
+        onClick={() => setResumeOpen(true)}
         className={cn(
           "fixed bottom-6 right-6 z-50 flex items-center gap-3 pl-2 pr-4.5 py-2 rounded-full shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-300 ease-in-out sm:hidden group border theme-transition",
           isDarkSection
@@ -238,7 +236,10 @@ export function Navbar() {
           Resume
           <ArrowUpRight className="w-3.5 h-3.5 text-[#B36A2E] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
         </span>
-      </a>
+      </button>
+
+      {/* Resume Preview Modal */}
+      <ResumePreview isOpen={resumeOpen} onOpenChange={setResumeOpen} />
     </>
   )
 }
