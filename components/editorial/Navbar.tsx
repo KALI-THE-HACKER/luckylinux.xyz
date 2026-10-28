@@ -99,6 +99,12 @@ export function Navbar() {
               Systems Lab
             </Link>
             <Link
+              href="/blog"
+              className={cn("transition-colors", isDarkSection ? "hover:text-[#F7F5F1]" : "hover:text-[#1C1C1C]")}
+            >
+              Blog
+            </Link>
+            <Link
               href="#contact"
               className={cn("transition-colors", isDarkSection ? "hover:text-[#F7F5F1]" : "hover:text-[#1C1C1C]")}
             >
@@ -192,6 +198,13 @@ export function Navbar() {
               className="hover:text-[#B36A2E] transition-colors"
             >
               Systems Lab
+            </Link>
+            <Link
+              href="/blog"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="hover:text-[#B36A2E] transition-colors"
+            >
+              Blog
             </Link>
             <Link
               href="#contact"

@@ -40,3 +40,51 @@ It acts as a gateway to the systems, applications, and experiments I build, host
 ---
 
 **Maintainer:** Lucky Verma
+
+---
+
+## 📝 Blog System
+
+MDX-powered blog with syntax highlighting, reading time, tags, and RSS feed.
+
+### Features
+- **MDX Support** - Write posts in Markdown with React components
+- **Syntax Highlighting** - Shiki-powered code blocks (dual theme)
+- **Reading Time** - Auto-calculated per post
+- **Tag System** - Filter posts by topic
+- **SEO Optimized** - Open Graph, Twitter Cards, JSON-LD
+- **RSS Feed** - Auto-generated at `/blog/rss.xml`
+
+### Adding a New Post
+
+Create a `.mdx` file in `content/posts/`:
+
+```markdown
+---
+title: "Your Post Title"
+date: "2026-01-15"
+description: "Brief description for SEO and previews"
+tags: ["tag1", "tag2", "tag3"]
+readingTime: "5 min read"  # auto-calculated if omitted
+coverImage: "/images/cover.png"  # optional
+draft: false  # set true to hide from listing
+---
+
+Your content here with **Markdown** and `code`.
+
+```python
+def hello():
+    print("Hello, World!")
+```
+```
+
+### Pages
+- `/blog` - Post listing with tag filter
+- `/blog/[slug]` - Individual post with TOC
+- `/blog/rss.xml` - RSS 2.0 feed
+
+### Tech Stack
+- `next-mdx-remote` for MDX processing
+- `shiki` for syntax highlighting
+- `@tailwindcss/typography` for prose styling
+- `gray-matter` for frontmatter parsing
