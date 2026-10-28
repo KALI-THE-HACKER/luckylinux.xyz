@@ -1,0 +1,142 @@
+---
+title: "Getting Started with DN42: A Decentralized Network Playground"
+date: "2026-09-15"
+description: "Learn how to join DN42, a decentralized VPN network for learning BGP, routing, and network engineering in a safe environment."
+tags: ["networking", "dn42", "bgp", "wireguard", "learning"]
+readingTime: "8 min read"
+coverImage: "/images/dn42-banner.png"
+---
+
+# Getting Started with DN42
+
+[DN42](https://dn42.dev) is a decentralized, peer-to-peer network built on VPN tunnels and BGP routing. It's an incredible playground for learning network engineering concepts without risking production infrastructure.
+
+## Why DN42?
+
+- **Real BGP experience** - Announce your own prefixes, peer with others
+- **Safe environment** - Isolated from the public internet
+- **Active community** - Helpful peers, extensive documentation
+- **Free ASN & IP space** - Get your own resources
+
+## Prerequisites
+
+- A Linux server (VPS, home lab, or VM)
+- Basic Linux networking knowledge
+- WireGuard for VPN tunnels
+- BGP daemon (Bird, FRR, or OpenBGPD)
+
+## Step 1: Reserve Resources
+
+First, find available resources on the [DN42 Explorer](https://explorer.burble.com/free):
+
+1. **ASN** - Autonomous System Number (e.g., `4242421820`)
+2. **IPv4 block** - `/27` or larger (e.g., `172.20.162.32/27`)
+3. **IPv6 block** - `/48` from ULA range (e.g., `fd1c:410f:2b9e::/48`)
+
+## Step 2: Create Maintainer & Person Objects
+
+Create IRR objects for the DN42 registry:
+
+```text
+mntner:          LUCKY-MNT
+descr:           Maintainer for Lucky Verma
+admin-c:         LUCKY-DN42
+tech-c:          LUCKY-DN42
+mnt-by:          LUCKY-MNT
+auth:            pgp-fingerprint YOUR_KEY_ID
+source:          DN42
+
+person:          LUCKY-DN42
+contact:         lucky@luckylinux.dev
+nic-hdl:         LUCKY-DN42
+mnt-by:          LUCKY-MNT
+source:          DN42
+```
+
+## Step 3: Configure WireGuard
+
+Generate keys and create peer configs:
+
+```bash
+# Generate keys
+wg genkey | tee privatekey | wg pubkey > publickey
+
+# Example peer config
+[Interface]
+PrivateKey = <your-private-key>
+Address = 172.20.162.33/27, fd1c:410f:2b9e::1/48
+ListenPort = 51820
+
+[Peer]
+PublicKey = <peer-public-key>
+AllowedIPs = 172.20.0.0/14, fd1c::/16
+Endpoint = peer.example.com:51820
+PersistentKeepalive = 25
+```
+
+## Step 4: Configure BGP (Bird 2.x)
+
+```bird
+protocol device {
+    scan time 10;
+}
+
+protocol direct {
+    interface "wg*";
+}
+
+protocol kernel {
+    scan time 20;
+    import none;
+    export filter {
+        if net ~ [ 172.20.162.32/27+, fd1c:410f:2b9e::/48+ ] then accept;
+        reject;
+    };
+}
+
+protocol bgp peer_1 {
+    local as 4242421820;
+    neighbor 172.20.162.34 as 4242421821;
+    multihop 64;
+    source address 172.20.162.33;
+    import all;
+    export filter {
+        if net ~ [ 172.20.162.32/27+, fd1c:410f:2b9e::/48+ ] then accept;
+        reject;
+    };
+}
+```
+
+## Step 5: Submit to Registry
+
+1. Fork the [DN42 registry](https://git.dn42.dev/dn42/registry)
+2. Add your objects to `data/`
+3. Create a Pull Request
+4. Wait for review and merge
+
+## Verification
+
+Check your connectivity:
+
+```bash
+# Test BGP session
+birdc show protocols
+
+# Test reachability
+ping 172.20.0.1
+traceroute 172.20.0.1
+
+# Check looking glass
+curl https://lg.dn42.dev/api/prefix/172.20.162.32/27
+```
+
+## Resources
+
+- [DN42 Wiki](https://dn42.dev/wiki)
+- [Bird Configuration Examples](https://dn42.dev/howto/Bird)
+- [WireGuard Setup](https://dn42.dev/howto/WireGuard)
+- [My DN42 Lab Repo](https://github.com/KALI-THE-HACKER/DN42-lab)
+
+---
+
+*Happy peering! 🌐*

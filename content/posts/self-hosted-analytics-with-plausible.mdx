@@ -1,0 +1,133 @@
+---
+title: "Self-Hosted Analytics with Plausible: Privacy-First Alternative to Google Analytics"
+date: "2026-08-22"
+description: "How I replaced Google Analytics with self-hosted Plausible for GDPR-compliant, lightweight tracking on my portfolio."
+tags: ["self-hosted", "analytics", "privacy", "plausible", "docker"]
+readingTime: "5 min read"
+---
+
+# Self-Hosted Analytics with Plausible
+
+After years of using Google Analytics, I decided to switch to a privacy-first alternative. [Plausible](https://plausible.io) offers a lightweight, open-source, GDPR-compliant analytics solution that you can self-host.
+
+## Why Plausible?
+
+| Feature | Google Analytics | Plausible |
+|---------|-----------------|-----------|
+| Script size | 45 KB | **1 KB** |
+| Cookies | Yes | **No** |
+| GDPR compliant | Complex | **Yes** |
+| Data ownership | Google | **You** |
+| Open source | No | **Yes** |
+
+## Deployment with Docker Compose
+
+```yaml
+version: '3.8'
+
+services:
+  plausible:
+    image: plausible/analytics:latest
+    container_name: plausible
+    restart: unless-stopped
+    environment:
+      - ADMIN_USER_EMAIL=admin@luckylinux.dev
+      - ADMIN_USER_NAME=Lucky
+      - ADMIN_USER_PWD=secure_password
+      - BASE_URL=https://analytics.luckylinux.dev
+      - SECRET_KEY_BASE=your-secret-key-here
+      - DISABLE_REGISTRATION=true
+    volumes:
+      - plausible-db:/var/lib/postgresql/data
+      - plausible-event-data:/var/lib/clickhouse
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+      - clickhouse
+
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_PASSWORD=postgres_password
+    volumes:
+      - plausible-db:/var/lib/postgresql/data
+
+  clickhouse:
+    image: clickhouse/clickhouse-server:23.8
+    environment:
+      - CLICKHOUSE_DB=plausible
+      - CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT=1
+    volumes:
+      - plausible-event-data:/var/lib/clickhouse
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+
+volumes:
+  plausible-db:
+  plausible-event-data:
+```
+
+## Nginx Reverse Proxy
+
+```nginx
+server {
+    listen 443 ssl http2;
+    server_name analytics.luckylinux.dev;
+
+    ssl_certificate /etc/letsencrypt/live/analytics.luckylinux.dev/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/analytics.luckylinux.dev/privkey.pem;
+
+    location / {
+        proxy_pass http://localhost:8000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+```
+
+## Integration
+
+Add to your site's `<head>`:
+
+```html
+<script defer data-domain="luckylinux.dev" 
+        src="https://analytics.luckylinux.dev/js/script.js"></script>
+```
+
+## Custom Events
+
+Track specific interactions:
+
+```javascript
+// Track button clicks
+plausible('cta_click', { props: { button: 'resume_download' } });
+
+// Track form submissions
+plausible('contact_form_submit', { props: { success: true } });
+```
+
+## Results
+
+- **99% smaller** tracking script
+- **Zero cookies** - no consent banner needed
+- **Full data ownership** - runs on my infrastructure
+- **Faster page loads** - improved Core Web Vitals
+
+## Monitoring
+
+```bash
+# Check logs
+docker compose logs -f plausible
+
+# Backup database
+docker exec plausible pg_dump -U postgres plausible > backup.sql
+```
+
+---
+
+*Privacy matters. Your visitors will thank you.* 🔒
